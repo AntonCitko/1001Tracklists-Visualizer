@@ -9,6 +9,9 @@ class trackList:
         
         page = requests.get(url, headers = Headers().generate())
         self.soup = BeautifulSoup(page.text, 'html.parser')
+        
+        self.meta_data = self.get_meta_data()
+        self.track_data = self.get_track_data()
     
     def get_meta_data(self):
         meta_data = {}
@@ -58,8 +61,6 @@ class trackList:
             source_w_number = source + str(source_number)
         
         meta_data[source_w_number] = tracklist_source[source]
-        
-        self.meta_data = meta_data
         
         return(meta_data)
 
@@ -113,8 +114,6 @@ class trackList:
                     track_info["mashup"] = False
         
             tracks_info.append(track_info)
-        
-        self.tracks_data = tracks_info
         
         return(tracks_info)
 
