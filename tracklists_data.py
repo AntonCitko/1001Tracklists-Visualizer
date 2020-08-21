@@ -2,8 +2,12 @@ import requests
 from fake_headers import Headers
 from bs4 import BeautifulSoup
 import re
+import pandas as pd
 
 class trackList:
+    '''
+    Initialization automatically calls get_meta_data and get_track_data
+    '''
     def __init__(self, url):
         self.url = url
         
@@ -13,6 +17,9 @@ class trackList:
         self.meta_data = self.get_meta_data()
         self.track_data = self.get_track_data()
     
+    '''
+    Gets meta data of tracklist on left sidebar of 1001tracklists pages
+    '''
     def get_meta_data(self):
         meta_data = {}
         
@@ -32,6 +39,7 @@ class trackList:
         meta_data["tracklist_tracks_IDed"] = IDed[0]
         meta_data["tracklist_tracks_total"] = IDed[1]
         
+        # Splits each genre into its own key with index
         tracklist_genres = meta.find("td", id = "tl_music_styles").text.split(", ")
         for i, genre in enumerate(tracklist_genres):
             meta_data["genre" + str(i)] = genre
@@ -49,9 +57,12 @@ class trackList:
           if bool(re.search("\/source\/", person_place.get("href"))):
             tracklist_source[person_place.parent.parent.parent.find("td").contents[0]] = person_place.text
             
+        # Splits each DJ into their own key with index
         for i, DJ in enumerate(tracklist_DJs):
           meta_data["DJ" + str(i)] = DJ
         
+        # Tracklist sources include event name, location, radio show, etc.
+        # Splits each by type of source
         for source in tracklist_source:
           source_number = 0
           source_w_number = source + str(source_number)
@@ -64,7 +75,11 @@ class trackList:
         
         return(meta_data)
 
+    '''
+    Gets all data in track table
     
+    Includes track name, artist, url, 1001tracklists id, time played, track number, whether its a mashup and to what mashup it matches
+    '''
     def get_track_data(self):
         tl_table = self.soup.find_all("tr", {"id": re.compile('tlp_[0-9]+')})
         
@@ -116,4 +131,15 @@ class trackList:
             tracks_info.append(track_info)
         
         return(tracks_info)
+    
+    '''
+    Outputs both track data and meta data as a Pandas Data Frame
+    '''
+    def output_table(self):
+        track_df = pd.DataFrame.from_dict(self.track_data)
+        
+        meta_df = pd.DataFrame([self.meta_data])
+        meta_df_long = pd.concat([meta_df]*track_df.shape[0], ignore_index = True)
+        
+        return(pd.concat([meta_df_long, track_df], axis = 1))
 
