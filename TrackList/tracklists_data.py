@@ -4,6 +4,17 @@ from bs4 import BeautifulSoup
 import re
 import pandas as pd
 
+EXTERNAL_MEDIA_LINK = "https://www.1001tracklists.com/ajax/get_medialink.php?idObject=5&idItem={track_id}&viewSource=1"
+
+SOURCES = {
+    "1": "beatport",
+    "2": "apple",
+    "4": "traxsource",
+    "10": "soundcloud",
+    "13": "video",
+    "36": "spotify",
+}
+
 class trackList:
     '''
     Initialization automatically calls get_meta_data and get_track_data
@@ -142,4 +153,49 @@ class trackList:
         meta_df_long = pd.concat([meta_df]*track_df.shape[0], ignore_index = True)
         
         return(pd.concat([meta_df_long, track_df], axis = 1))
+
+'''
+Gets the external media of a 1001Tracklists track by track id
+'''
+def get_external_media(tracklists_song_id):
+    if not bool(re.match("\\d+", str(tracklists_song_id))):
+        return(None)
+    
+    external_url = EXTERNAL_MEDIA_LINK.format(track_id = tracklists_song_id)
+    response = requests.get(external_url).json()
+    
+    track_external_data = {}
+    
+    if response["success"]:
+        data = response["data"]
+
+        for media in data:
+            try:
+                source = SOURCES[media["source"]]
+            except:
+                source = "unknown_source"
+
+            source_number = 0
+            source_w_number = source + str(source_number)
+        
+            while source_w_number in track_external_data:
+                source_number += 1
+                source_w_number = source + str(source_number)
+    
+            try:
+                track_external_data[source_w_number] = media["playerId"]
+            except:
+                pass
+        
+        return(track_external_data)
+    
+    else:
+        return(None)
+
+
+
+
+
+
+
 
