@@ -62,27 +62,27 @@ class trackList:
         tracklist_source = {}
         
         for person_place in tracklist_DJs_location:
-          if bool(re.search("\/dj\/", person_place.get("href"))):
-            tracklist_DJs.append(person_place.text)
+            if bool(re.search("\/dj\/", person_place.get("href"))):
+                tracklist_DJs.append(person_place.text)
           
-          if bool(re.search("\/source\/", person_place.get("href"))):
-            tracklist_source[person_place.parent.parent.parent.find("td").contents[0]] = person_place.text
+            if bool(re.search("\/source\/", person_place.get("href"))):
+                tracklist_source[person_place.parent.parent.parent.find("td").contents[0]] = person_place.text
             
         # Splits each DJ into their own key with index
         for i, DJ in enumerate(tracklist_DJs):
-          meta_data["DJ" + str(i)] = DJ
+            meta_data["DJ" + str(i)] = DJ
         
         # Tracklist sources include event name, location, radio show, etc.
         # Splits each by type of source
         for source in tracklist_source:
-          source_number = 0
-          source_w_number = source + str(source_number)
-        
-          while source_w_number in meta_data:
-            source_number += 1
+            source_number = 0
             source_w_number = source + str(source_number)
         
-        meta_data[source_w_number] = tracklist_source[source]
+            while source_w_number in meta_data:
+                source_number += 1
+                source_w_number = source + str(source_number)
+        
+            meta_data[source_w_number] = tracklist_source[source]
         
         return(meta_data)
 
