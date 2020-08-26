@@ -47,15 +47,24 @@ def get_spotify_song_metrics(song_id = None, song_name = None, song_artist = Non
             }
 
             if song_name == result_info["name"] and song_artist in result_info["artists"]:
-              song_id_searched = result_info["id"]
-              song_features = sp.audio_features(song_id_searched)
+              song_id = result_info["id"]
+              song_features = sp.audio_features(song_id)
       
     try:
         song_features = song_features[0]
 
         song_metrics = pd.DataFrame([{metric : value for metric, value in song_features.items() if metric in SPOTIFY_SONG_METRICS}])
-      
-        return(song_metrics)
+    
     except NameError:
         return(None)
-
+    
+    try:
+        song_artist_id = sp.track(song_id)["artists"][0]["id"]
+        print(song_artist_id)
+        song_genres = sp.artist(song_artist_id)["genres"]
+        print(song_genres)
+        song_metrics["genres"] = ",".join(song_genres)
+    except:
+        print("failed")
+    
+    return(song_metrics)
