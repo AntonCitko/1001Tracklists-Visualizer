@@ -2,6 +2,7 @@ import os
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import pandas as pd
+import numpy as np
 
 SPOTIFY_CLIENT_ID = os.environ["SPOTIFY_CLIENT_ID"]
 SPOTIFY_CLIENT_SECRET = os.environ["SPOTIFY_CLIENT_SECRET"]
@@ -60,11 +61,9 @@ def get_spotify_song_metrics(song_id = None, song_name = None, song_artist = Non
     
     try:
         song_artist_id = sp.track(song_id)["artists"][0]["id"]
-        print(song_artist_id)
         song_genres = sp.artist(song_artist_id)["genres"]
-        print(song_genres)
         song_metrics["genres"] = ",".join(song_genres)
     except:
-        print("failed")
+        song_metrics["genres"] = np.nan
     
     return(song_metrics)
