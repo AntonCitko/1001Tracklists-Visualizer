@@ -12,8 +12,6 @@ from flask_caching import Cache
 from wordcloud import WordCloud
 import os
 
-#%%
-
 import dash
 import dash.dependencies as dd
 import dash_core_components as dcc
@@ -24,6 +22,8 @@ from io import BytesIO
 import pandas as pd
 from wordcloud import WordCloud
 import base64
+
+import tabulate
 
 #%%
 
@@ -37,7 +37,7 @@ data = get_data(url)
 
 #%%
 
-def time_to_float(time):
+def time_to_sec(time):
     time_vals = time.split(":")[::-1]
     seconds = 0
     
@@ -52,7 +52,7 @@ data["time"] = data["time"].ffill()
 
 data["time"] = data["time"].str.strip()
 
-data["seconds"] = data["time"].apply(time_to_float)
+data["seconds"] = data["time"].apply(time_to_sec)
 
 song_genres = data["genres"].dropna().to_list()
 song_genres = [genre for genre_list in song_genres for genre in genre_list.split(",") if genre]
@@ -64,6 +64,8 @@ data_clean = data.dropna(subset = ["tempo"])
 #%%
 
 data_tempo_mean = data_clean.groupby("seconds")["tempo"].mean()
+
+data_metric_mean = data_clean[["acousticness", "instrumentalness", "speechiness", "danceability", "energy", "valence"]].mean()
 
 #%%
 
@@ -103,6 +105,16 @@ fig.add_trace(
                 line_shape = "spline",
                 line = dict(smoothing = 1.3,
                             color = "#2b72c4")),
+    secondary_y = False,
+)
+
+fig.add_trace(
+    go.Scatter(x = data_clean.seconds,
+                y = data_clean.valence.rolling(3, min_periods = 1, center = True).mean(),
+                name = "Valence",
+                line_shape = "spline",
+                line = dict(smoothing = 1.3,
+                            color = "#C42BBF")),
     secondary_y = False,
 )
 
@@ -167,6 +179,8 @@ fig.update_yaxes(title_text="Beats per Minute", secondary_y=True)
 ### FIGURE 2
 
 
+
+
 app.layout = html.Div(children = [
         html.H1(children = "1001Tracklists by the Numbers"),
         
@@ -185,12 +199,17 @@ app.layout = html.Div(children = [
                 style = dict(display = "inline-block", align = "left")),
     
             html.Div([
-                html.H3('Column 2'),
-                 dcc.Graph(
-                     id = "example4",
-                     figure = fig
-                     )
-            ], className="six columns",
+                html.Div([
+                    html.P("Energy"), html.H4("0.334")],
+                        id="wells",
+                        className="mini_container",
+                        ),
+                html.Div([
+                    html.P("Energy"), html.H4("0.334")],
+                        id="wells2",
+                        className="mini_container",
+                        ),
+            ], className="three columns",
                 style = dict(width = "65%", display = "inline-block", align = "right"))
         ], className="row", 
             style = dict(display = "flex"))
