@@ -112,6 +112,12 @@ app.layout = html.Div(children = [
         ], className="row", 
             style = dict(display = "flex")),
         
+        html.Iframe(src="https://open.spotify.com/embed/track/6afn8m34zlEiD6Vwzxu0BQ",
+                    style = {"width" : "500px",
+                                "height" : "580px",
+                                "border" : "0px"
+                                }),
+        
         html.Div(id='tracklist_data', style={'display': 'none'}),
         html.Div(id='tracklist_data_clean', style={'display': 'none'}),
         html.Div(id='tracklist_data_missing', style={'display': 'none'}),
