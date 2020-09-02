@@ -112,7 +112,7 @@ app.layout = html.Div(children = [
         ], className="row", 
             style = dict(display = "flex")),
         
-        html.Iframe(src="https://open.spotify.com/embed/track/6afn8m34zlEiD6Vwzxu0BQ",
+        html.Iframe(id = "spotify_play",
                     style = {"width" : "500px",
                                 "height" : "580px",
                                 "border" : "0px"
@@ -122,7 +122,9 @@ app.layout = html.Div(children = [
         html.Div(id='tracklist_data_clean', style={'display': 'none'}),
         html.Div(id='tracklist_data_missing', style={'display': 'none'}),
         html.Div(id='song_genres', style={'display': 'none'}),
-        html.Div(id='tracklist_metrics_mean', style={'display': 'none'})
+        html.Div(id='tracklist_metrics_mean', style={'display': 'none'}),
+        html.Div(id='spotify_default_song', style={'display': 'none'}),
+        html.Div(id="song_clicked", style={"display":"none"})
     ])
 
 @app.callback(
@@ -131,7 +133,8 @@ app.layout = html.Div(children = [
     Output("tracklist_data_clean", "children"),
     Output("tracklist_data_missing", "children"),
     Output("song_genres", "children"),
-    Output("tracklist_metrics_mean", "children")],
+    Output("tracklist_metrics_mean", "children"),
+    Output("spotify_default_song", "children")],
     [Input("input_url", "value")]
 )
 def update_url(url):
@@ -164,7 +167,9 @@ def update_url(url):
     
     data_metric_mean = data_clean[["acousticness", "instrumentalness", "speechiness", "danceability", "energy", "valence"]].mean()
     
-    return(tracklist_name, data.to_json(), data_clean.to_json(), data_missing.to_json(), song_genres, data_metric_mean.to_json())
+    spotify_default_song = data.iloc[0][["name", "spotify0"]].to_list()
+    
+    return(tracklist_name, data.to_json(), data_clean.to_json(), data_missing.to_json(), song_genres, data_metric_mean.to_json(), spotify_default_song)
 
 @app.callback(
     Output("tempo_graph", "figure"),
@@ -181,7 +186,8 @@ def update_tempo_graph(data):
                     name = "Energy",
                     line_shape = "spline",
                     line = dict(smoothing = 1.3,
-                                color = "#542bc4")),
+                                color = "#542bc4"),
+                    hoverinfo = "skip"),
         secondary_y = False,
     )
     
@@ -191,7 +197,8 @@ def update_tempo_graph(data):
                     name = "Danceability",
                     line_shape = "spline",
                     line = dict(smoothing = 1.3,
-                                color = "#2b72c4")),
+                                color = "#2b72c4"),
+                    hoverinfo = "skip"),
         secondary_y = False,
     )
     
@@ -201,7 +208,8 @@ def update_tempo_graph(data):
                     name = "Valence",
                     line_shape = "spline",
                     line = dict(smoothing = 1.3,
-                                color = "#C42BBF")),
+                                color = "#C42BBF"),
+                    hoverinfo = "skip"),
         secondary_y = False,
     )
     
@@ -213,18 +221,26 @@ def update_tempo_graph(data):
                     name = "Tempo",
                     line_shape = "spline",
                     line = dict(width = 5,
-                                color = "#2bc47d")),
+                                color = "#2bc47d"),
+                    hoverinfo = "skip"),
         secondary_y = True
     )
     
+    hovertemplate_tempo = """<b>%{customdata[0]}</b><br>Tempo: %{customdata[1]}<br>Energy: %{customdata[2]}<br>Danceability: %{customdata[3]}<br>Valence: %{customdata[4]}"""
     
     fig.add_trace(
         go.Scatter(x = data.seconds,
                     y = data.tempo,
+                    customdata = data[["name", "tempo", "energy", "danceability", "valence", "spotify0"]].round(2),
                     name = "Song",
                     mode = "markers",
                     marker = dict(size = 10,
-                                  color = "#212120")),
+                                  color = "#212120"),
+                    hovertemplate = hovertemplate_tempo,
+                    hoverlabel = dict(bgcolor = "white",
+                                      bordercolor = "white",
+                                      font_color = "black",
+                                      namelength = 0)),
         secondary_y = True
     )
     
@@ -247,7 +263,10 @@ def update_tempo_graph(data):
             tickmode = "array",
             tickvals = data.seconds,
             ticktext = data.time,
-            tickangle = 65
+            tickangle = 65,
+            showspikes = True,
+            spikemode = "across",
+            spikethickness = 2
             ),
         yaxis = dict(
             showgrid = False,
@@ -255,7 +274,8 @@ def update_tempo_graph(data):
         yaxis2 = dict(
             showgrid = False,
             side = "left"),
-        plot_bgcolor = "white"
+        plot_bgcolor = "white",
+        hovermode = "closest"
     )
     
     # Set x-axis title
@@ -285,23 +305,42 @@ def update_key_graph(data):
     data_key_mean = data.groupby("seconds")["key"].mean()
     data_loudness_mean = data.groupby("seconds")["loudness"].mean()
     
-    fig.add_trace(
-        go.Scatter(x = data_key_mean.index,
-                    y = data_key_mean,
-                    name = "Key",
-                    line_shape = "spline",
-                    line = dict(width = 5,
-                                color = "#2bc47d")),
-        secondary_y = True
-    )
+    # fig.add_trace(
+    #     go.Scatter(x = data_key_mean.index,
+    #                 y = data_key_mean,
+    #                 name = "Key",
+    #                 line_shape = "spline",
+    #                 line = dict(width = 5,
+    #                             color = "#2bc47d")),
+    #     secondary_y = True
+    # )
     
     fig.add_trace(
         go.Scatter(x = data.seconds,
                     y = data.key,
+                    name = "Key",
+                    line_shape = "hv",
+                    line = dict(width = 5,
+                                color = "#2bc47d"),
+                    hoverinfo = "skip"),
+        secondary_y = True
+    )
+    
+    hovertemplate_tempo = """<b>%{customdata[0]}</b><br>Key: %{customdata[1]}<br>Loudness: %{customdata[2]}"""
+    
+    fig.add_trace(
+        go.Scatter(x = data.seconds,
+                    y = data.key,
+                    customdata = data[["name", "key", "loudness", "spotify0"]].round(2),
                     name = "Mode",
                     mode = "markers",
                     marker = dict(size = 10,
-                                  color = data["mode"])),
+                                  color = data["mode"]),
+                    hovertemplate = hovertemplate_tempo,
+                    hoverlabel = dict(bgcolor = "white",
+                                      bordercolor = "white",
+                                      font_color = "black",
+                                      namelength = 0)),
         secondary_y = True
     )
     
@@ -311,7 +350,8 @@ def update_key_graph(data):
                     y = data_loudness_mean,
                     name = "Loudness",
                     line_shape = "spline",
-                    line = dict(color = "#212120"))
+                    line = dict(color = "#212120"),
+                    hoverinfo = "skip")
     )
         
     fig.add_trace(
@@ -321,7 +361,8 @@ def update_key_graph(data):
                     line = dict(color = "#FFFFFF"),
                     fill = "tonexty",
                     fillcolor = "#888888",
-                    showlegend = False)
+                    showlegend = False,
+                    hoverinfo = "skip")
     )
     # fig.add_trace(
     #     go.Scatter(x = [0, data.seconds.max()],
@@ -350,7 +391,10 @@ def update_key_graph(data):
             tickmode = "array",
             tickvals = data.seconds,
             ticktext = data.time,
-            tickangle = 65
+            tickangle = 65,
+            showspikes = True,
+            spikemode = "across",
+            spikethickness = 2
             ),
         yaxis = dict(
             showgrid = False,
@@ -389,7 +433,6 @@ def update_tracklist_metrics_mean(metrics_mean):
            float(metrics_mean["instrumentalness"].round(3)), 
            float(metrics_mean["speechiness"].round(3)))
     
-    
 
 @app.callback(
     Output('image_wc', 'src'), 
@@ -410,6 +453,48 @@ def make_word_cloud(song_genres):
     img = BytesIO()
     image.save(img, format='PNG')
     return 'data:image/png;base64,{}'.format(base64.b64encode(img.getvalue()).decode())
+
+
+@app.callback(
+    [Output("song_clicked", "children"),
+     Output("spotify_play", "src")],
+    [Input("spotify_default_song", "children"),
+     Input("tempo_graph", "clickData"),
+     Input("key_graph", "clickData")]
+)
+def display_song(spotify_default_song, click_data_tempo, click_data_key):
+    ctx = dash.callback_context
+    
+    spotify_embed_url_prefix = "https://open.spotify.com/embed/track/"
+    
+    if ctx.triggered[0]["prop_id"] == "spotify_default_song.children":
+        
+        spotify_default_song_name = spotify_default_song[0]
+        spotify_default_song_id = spotify_default_song[1]
+        
+        song_spotify_embed = spotify_embed_url_prefix + spotify_default_song_id
+        
+        return(spotify_default_song_name, song_spotify_embed)
+    
+    clicked_data = ctx.triggered[0]["value"]["points"][0]["customdata"]
+    song_clicked_name = clicked_data[0]
+    song_clicked_id = clicked_data[-1]
+    
+    song_spotify_embed = spotify_embed_url_prefix + song_clicked_id
+    
+    return(song_clicked_name, song_spotify_embed)
+
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     app.run_server(debug = True, use_reloader = False)
