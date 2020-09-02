@@ -52,28 +52,152 @@ def time_to_sec(time):
 
 app = dash.Dash(__name__)
 
-app.layout = html.Div(children = [
-        html.H1(children = "1001Tracklists by the Numbers"),
+app.layout = html.Div(
+    style = {
+        "background-image" : 'url("/assets/smiley.png")',
+        "background-repeate" : "repeat-y",
+        "background-size" : "100px 100px"
+        },
+    
+    children = [
         
-        dcc.Input(
-            id="input_url",
-            value =  "https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html",
-            type = "text",
-            placeholder = "Enter a tracklist URL from 1001Tracklists.com",
-            debounce = True
-            ),
+        html.Section([
+            html.Div([
+                html.Div([
+                    html.H1(children = "1001Tracklists by the Numbers",
+                            className = "title"),
+                    html.H2(children = "1001Tracklists by the Numbers",
+                            className = "subtitle")
+                ], className='container'),
+                
+                html.Div([
+                    dcc.Input(
+                        id="input_url",
+                        value =  "https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html",
+                        type = "text",
+                        placeholder = "Enter a tracklist URL from 1001Tracklists.com",
+                        debounce = True
+                        ),
+                
+                    html.Div(id = "tracklist_name"),
+                
+                    html.H2(children = "set"),
+                ])
+ 			], className='hero-body')
+		], className='hero is-dark'),
         
-        html.Div(id = "tracklist_name"),
-        
-        html.H2(children = "set"),
-        
-        dcc.Graph(
-            id = "tempo_graph"
-            ),
-        
-        dcc.Graph(
-            id = "key_graph"
-            ),
+        html.Div([
+            html.Div([
+                html.Div([
+                    dcc.Graph(
+                        id = "tempo_graph"
+                        ),
+                ], className = "box",
+                    style = {"margin" : "10px 0px 20px 20px"}),
+                
+                html.Div([
+                    dcc.Graph(
+                        id = "key_graph"
+                        )
+                ], className = "box",
+                    style = {"margin" : "0px 0px 10px 20px"})
+            ], className = "column is-three-quarters"),
+            
+            html.Div([
+                html.Div([
+                    html.Iframe(id = "spotify_play",
+                                style = {"height" : "80px",
+                                        "width" : "100%",
+                                        "frameborder" : "0",
+                                        "allowtransparency" : "True"})
+                ], style = {"width" : "95%",
+                             "height" : "490px",
+                             "margin" : "10px"}),
+                html.Div([
+                    html.Div([
+                        html.P("Energy"), html.H4(id = "sp_energy")],
+                            className="box",
+                            style = {"width" : "auto",
+                                     "display" : "inline-block",
+                                     "margin" : "5px"}
+                            ),
+                    html.Div([
+                        html.P("Danceability"), html.H4(id = "sp_danceability")],
+                            className="box",
+                            style = {"width" : "auto",
+                                     "display" : "inline-block",
+                                     "margin" : "5px"}
+                            ),
+                    html.Div([
+                        html.P("Valence"), html.H4(id = "sp_valence")],
+                            className="box",
+                            style = {"width" : "auto",
+                                     "display" : "inline-block",
+                                     "margin" : "5px"}
+                            ),
+                    html.Div([
+                        html.P("Acousticness"), html.H4(id = "sp_acousticness")],
+                            className="box",
+                            style = {"width" : "auto",
+                                     "display" : "inline-block",
+                                     "margin" : "5px"}
+                            ),
+                    html.Div([
+                        html.P("Instrumentalness"), html.H4(id = "sp_instrumentalness")],
+                            className="box",
+                            style = {"width" : "auto",
+                                     "display" : "inline-block",
+                                     "margin" : "5px"}
+                            ),
+                    html.Div([
+                        html.P("Speechiness"), html.H4(id = "sp_speechiness")],
+                            className="box",
+                            style = {"width" : "auto",
+                                     "display" : "inline-block",
+                                     "margin" : "5px"}
+                            ),
+                    html.Div([
+                        html.P("Key"), html.H4(id = "sp_key")],
+                            className="box",
+                            style = {"width" : "auto",
+                                     "display" : "inline-block",
+                                     "margin" : "5px"}
+                            ),
+                    html.Div([
+                        html.P("Mode"), html.H4(id = "sp_mode")],
+                            className="box",
+                            style = {"width" : "auto",
+                                     "display" : "inline-block",
+                                     "margin" : "5px"}
+                            ),
+                    html.Div([
+                        html.P("Tempo"), html.H4(id = "sp_tempo")],
+                            className="box",
+                            style = {"width" : "auto",
+                                     "display" : "inline-block",
+                                     "margin" : "5px"}
+                            ),
+                    html.Div([
+                        html.P("Artist Genres"), html.H4(id = "sp_genres")],
+                            className="box",
+                            style = {"width" : "auto",
+                                     "display" : "inline-block",
+                                     "margin" : "5px"}
+                            ),
+                    html.Div([
+                        html.P("Duration"), html.H4(id = "sp_duration")],
+                            className="box",
+                            style = {"width" : "auto",
+                                     "display" : "inline-block",
+                                     "margin" : "5px"}
+                            )
+                ])
+            ], className = "column",
+               style = {"height" : "100%",
+                        "width" : "100%"})
+            
+        ], className = "columns",
+            style = {"height" : "1100px"}),
         
         html.Div([
             html.Div([
@@ -111,12 +235,6 @@ app.layout = html.Div(children = [
                 style = dict(width = "65%", display = "inline-block", align = "right"))
         ], className="row", 
             style = dict(display = "flex")),
-        
-        html.Iframe(id = "spotify_play",
-                    style = {"width" : "500px",
-                                "height" : "580px",
-                                "border" : "0px"
-                                }),
         
         html.Div(id='tracklist_data', style={'display': 'none'}),
         html.Div(id='tracklist_data_clean', style={'display': 'none'}),
@@ -420,7 +538,7 @@ def update_key_graph(data):
      Output("avg_valence", "children"),
      Output("avg_acousticness", "children"),
      Output("avg_instrumentalness", "children"),
-     Output("avg_speechiness", "children"),],
+     Output("avg_speechiness", "children")],
     [Input("tracklist_metrics_mean", "children")]
 )
 def update_tracklist_metrics_mean(metrics_mean):
@@ -457,32 +575,45 @@ def make_word_cloud(song_genres):
 
 @app.callback(
     [Output("song_clicked", "children"),
-     Output("spotify_play", "src")],
+     Output("spotify_play", "src"),
+     Output("sp_energy", "children"),
+     Output("sp_danceability", "children"),
+     Output("sp_valence", "children"),
+     Output("sp_acousticness", "children"),
+     Output("sp_instrumentalness", "children"),
+     Output("sp_speechiness", "children"),
+     Output("sp_key", "children"),
+     Output("sp_mode", "children"),
+     Output("sp_tempo", "children"),
+     Output("sp_genres", "children"),
+     Output("sp_duration", "children")],
     [Input("spotify_default_song", "children"),
+     Input("tracklist_data_clean", "children"),
      Input("tempo_graph", "clickData"),
      Input("key_graph", "clickData")]
 )
-def display_song(spotify_default_song, click_data_tempo, click_data_key):
+def update_song(spotify_default_song, data, click_data_tempo, click_data_key):
     ctx = dash.callback_context
     
-    spotify_embed_url_prefix = "https://open.spotify.com/embed/track/"
+    data = pd.read_json(data)
+    
+    SPOTIFY_EMBED_URL_PREFIX = "https://open.spotify.com/embed/track/"
+    SP_METRICS = ["energy", "danceability", "valence", "acousticness", "instrumentalness", "speechiness", "key", "mode", "tempo", "genres", "duration_ms"]
     
     if ctx.triggered[0]["prop_id"] == "spotify_default_song.children":
+        song_clicked_name = spotify_default_song[0]
+        song_clicked_id = spotify_default_song[1]
         
-        spotify_default_song_name = spotify_default_song[0]
-        spotify_default_song_id = spotify_default_song[1]
-        
-        song_spotify_embed = spotify_embed_url_prefix + spotify_default_song_id
-        
-        return(spotify_default_song_name, song_spotify_embed)
+    else:
+        clicked_data = ctx.triggered[0]["value"]["points"][0]["customdata"]
+        song_clicked_name = clicked_data[0]
+        song_clicked_id = clicked_data[-1]
     
-    clicked_data = ctx.triggered[0]["value"]["points"][0]["customdata"]
-    song_clicked_name = clicked_data[0]
-    song_clicked_id = clicked_data[-1]
+    song_spotify_embed = SPOTIFY_EMBED_URL_PREFIX + song_clicked_id
     
-    song_spotify_embed = spotify_embed_url_prefix + song_clicked_id
+    song_spotify_metrics = tuple(data[data["name"] == song_clicked_name][SP_METRICS].round(2).values.tolist()[0])
     
-    return(song_clicked_name, song_spotify_embed)
+    return(song_clicked_name, song_spotify_embed, *song_spotify_metrics)
 
 
 
