@@ -37,6 +37,8 @@ class trackList:
         url_comp = self.url.split("/")
         meta_data["tracklist_id"] = url_comp[url_comp.index("tracklist") + 1]
         
+        meta_data["tracklist_name"] = self.soup.find("h1", id = "pageTitle").text.strip()
+        
         meta = self.soup.find("div", id = "leftDiv")
         
         try:
