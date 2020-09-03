@@ -35,11 +35,35 @@ import os
 
 # url= "https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html"
 
-# data = get_data(url)
+url = "https://www.1001tracklists.com/tracklist/10ufggtt/wandw-20xx-xr-live-broadcast-li-ning-arena-rave-culture-city-2020-05-23.html"
+
+data = get_data(url)
+
+#%%
+
+# data["time"] = data["time"].replace(r'^\s*$', np.nan, regex=True)
+# data["time"] = data["time"].ffill()
+# data["time"] = data["time"].str.strip()
+# data["seconds"] = data["time"].apply(time_to_sec)
+
+# data_missing = data[data["tempo"].isnull()]
+
+# data_clean = data.dropna(subset = ["tempo"])
+
+# song_genres = data["genres"].dropna().to_list()
+# song_genres = [genre for genre_list in song_genres for genre in genre_list.split(",") if genre]
+
+# data_metric_mean = data_clean[["acousticness", "instrumentalness", "speechiness", "danceability", "energy", "valence"]].mean()
+
+# spotify_default_song = data.iloc[0][["name", "spotify0"]].to_list()
 
 #%%
 
 def time_to_sec(time):
+    
+    if pd.isnull(time):
+        return(np.nan)
+    
     time_vals = time.split(":")[::-1]
     seconds = 0
     
@@ -64,9 +88,9 @@ app.layout = html.Div(
         html.Section([
             html.Div([
                 html.Div([
-                    html.H1(children = "1001Tracklists by the Numbers",
+                    html.H1(children = "Tracklist Analyzer",
                             className = "title is-1"),
-                    html.H2(children = "1001Tracklists by the Numbers",
+                    html.H2(children = "Discover how a set or playlist progresses",
                             className = "subtitle is-2")
                 ], className='container'),
                 
@@ -77,12 +101,6 @@ app.layout = html.Div(
             html.Div([
                 html.H4(children = "Enter a tracklist URL from 1001Tracklists.com",
                         className = "title is-4"),
-                
-                # html.Input(id = "input_url",
-                #            className = "input",
-                #            type = "text",
-                #            value =  "https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html"
-                #            ),
                 
                 html.Div([
                     dcc.Input(
@@ -326,7 +344,7 @@ def update_url(url):
     
     data_metric_mean = data_clean[["acousticness", "instrumentalness", "speechiness", "danceability", "energy", "valence"]].mean()
     
-    spotify_default_song = data.iloc[0][["name", "spotify0"]].to_list()
+    spotify_default_song = data_clean.iloc[0][["name", "spotify0"]].to_list()
     
     return(tracklist_name, data.to_json(), data_clean.to_json(), data_missing.to_json(), song_genres, data_metric_mean.to_json(), spotify_default_song)
 
