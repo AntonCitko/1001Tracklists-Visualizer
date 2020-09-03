@@ -54,9 +54,9 @@ app = dash.Dash(__name__)
 
 app.layout = html.Div(
     style = {
-        "background-image" : 'url("/assets/smiley.png")',
+        "background-image" : 'url("/assets/smiley-pattern1.jpg")',
         "background-repeate" : "repeat-y",
-        "background-size" : "100px 100px"
+        "background-size" : "200px 200px"
         },
     
     children = [
@@ -65,10 +65,24 @@ app.layout = html.Div(
             html.Div([
                 html.Div([
                     html.H1(children = "1001Tracklists by the Numbers",
-                            className = "title"),
+                            className = "title is-1"),
                     html.H2(children = "1001Tracklists by the Numbers",
-                            className = "subtitle")
+                            className = "subtitle is-2")
                 ], className='container'),
+                
+ 			], className='hero-body')
+		], className='hero is-small is-black'),
+        
+        html.Div([
+            html.Div([
+                html.H4(children = "Enter a tracklist URL from 1001Tracklists.com",
+                        className = "title is-4"),
+                
+                # html.Input(id = "input_url",
+                #            className = "input",
+                #            type = "text",
+                #            value =  "https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html"
+                #            ),
                 
                 html.Div([
                     dcc.Input(
@@ -76,15 +90,17 @@ app.layout = html.Div(
                         value =  "https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html",
                         type = "text",
                         placeholder = "Enter a tracklist URL from 1001Tracklists.com",
-                        debounce = True
+                        debounce = True,
+                        className = "input",
+                        style = {"border-color" : "yellow"}
                         ),
-                
-                    html.Div(id = "tracklist_name"),
-                
-                    html.H2(children = "set"),
-                ])
- 			], className='hero-body')
-		], className='hero is-dark'),
+                ], style = {"margin" : "0px 0px 10px 0px"}),
+            
+                html.H5(id = "tracklist_name",
+                        className = "subtitle is-5"),
+            ]),
+        ], className= "box",
+            style = {"margin" : "20px 20px 0px 20px"}),
         
         html.Div([
             html.Div([
@@ -93,103 +109,128 @@ app.layout = html.Div(
                         id = "tempo_graph"
                         ),
                 ], className = "box",
-                    style = {"margin" : "10px 0px 20px 20px"}),
+                    style = {"margin" : "20px 0px 20px 20px",
+                             "border-radius" : "0px"}),
                 
                 html.Div([
                     dcc.Graph(
                         id = "key_graph"
                         )
                 ], className = "box",
-                    style = {"margin" : "0px 0px 10px 20px"})
+                    style = {"margin" : "20px 0px 20px 20px",
+                             "border-radius" : "0px"})
             ], className = "column is-three-quarters"),
             
             html.Div([
                 html.Div([
                     html.Iframe(id = "spotify_play",
-                                style = {"height" : "80px",
+                                style = {"height" : "100%",
                                         "width" : "100%",
                                         "frameborder" : "0",
                                         "allowtransparency" : "True"})
-                ], style = {"width" : "95%",
+                ], style = {"width" : "96%",
                              "height" : "490px",
-                             "margin" : "10px"}),
+                             "margin" : "20px 20px 20px 0px",
+                             "background-color" : "black"}),
                 html.Div([
                     html.Div([
                         html.P("Energy"), html.H4(id = "sp_energy")],
                             className="box",
-                            style = {"width" : "auto",
+                            style = {"width" : "30%",
+                                     "height" : "100px",
                                      "display" : "inline-block",
-                                     "margin" : "5px"}
+                                     "margin" : "0px 5px 5px 0px",
+                                     "border-radius" : "0px"}
                             ),
                     html.Div([
                         html.P("Danceability"), html.H4(id = "sp_danceability")],
                             className="box",
-                            style = {"width" : "auto",
+                            style = {"width" : "32%",
+                                     "height" : "100px",
                                      "display" : "inline-block",
-                                     "margin" : "5px"}
+                                     "margin" : "0px 5px 5px 5px",
+                                     "border-radius" : "0px"}
                             ),
                     html.Div([
                         html.P("Valence"), html.H4(id = "sp_valence")],
                             className="box",
-                            style = {"width" : "auto",
+                            style = {"width" : "30%",
+                                     "height" : "100px",
                                      "display" : "inline-block",
-                                     "margin" : "5px"}
-                            ),
-                    html.Div([
-                        html.P("Acousticness"), html.H4(id = "sp_acousticness")],
-                            className="box",
-                            style = {"width" : "auto",
-                                     "display" : "inline-block",
-                                     "margin" : "5px"}
+                                     "margin" : "0px 0px 5px 5px",
+                                     "border-radius" : "0px"}
                             ),
                     html.Div([
                         html.P("Instrumentalness"), html.H4(id = "sp_instrumentalness")],
                             className="box",
-                            style = {"width" : "auto",
+                            style = {"width" : "36%",
+                                     "height" : "100px",
                                      "display" : "inline-block",
-                                     "margin" : "5px"}
+                                     "margin" : "5px 5px 5px 0px",
+                                     "border-radius" : "0px"}
+                            ),
+                    html.Div([
+                        html.P("Acousticness"), html.H4(id = "sp_acousticness")],
+                            className="box",
+                            style = {"width" : "28%",
+                                     "height" : "100px",
+                                     "display" : "inline-block",
+                                     "margin" : "5px 5px 5px 5px",
+                                     "border-radius" : "0px"}
                             ),
                     html.Div([
                         html.P("Speechiness"), html.H4(id = "sp_speechiness")],
                             className="box",
-                            style = {"width" : "auto",
+                            style = {"width" : "28%",
+                                     "height" : "100px",
                                      "display" : "inline-block",
-                                     "margin" : "5px"}
+                                     "margin" : "5px 5px 5px 5px",
+                                     "border-radius" : "0px"}
                             ),
                     html.Div([
                         html.P("Key"), html.H4(id = "sp_key")],
                             className="box",
-                            style = {"width" : "auto",
+                            style = {"width" : "22.5%",
+                                     "height" : "100px",
                                      "display" : "inline-block",
-                                     "margin" : "5px"}
+                                     "margin" : "5px 5px 5px 0px",
+                                     "border-radius" : "0px"}
                             ),
                     html.Div([
                         html.P("Mode"), html.H4(id = "sp_mode")],
                             className="box",
-                            style = {"width" : "auto",
+                            style = {"width" : "22.5%",
+                                     "height" : "100px",
                                      "display" : "inline-block",
-                                     "margin" : "5px"}
+                                     "margin" : "5px 5px 5px 5px",
+                                     "border-radius" : "0px"}
                             ),
                     html.Div([
                         html.P("Tempo"), html.H4(id = "sp_tempo")],
                             className="box",
-                            style = {"width" : "auto",
+                            style = {"width" : "22.5%",
+                                     "height" : "100px",
                                      "display" : "inline-block",
-                                     "margin" : "5px"}
-                            ),
-                    html.Div([
-                        html.P("Artist Genres"), html.H4(id = "sp_genres")],
-                            className="box",
-                            style = {"width" : "auto",
-                                     "display" : "inline-block",
-                                     "margin" : "5px"}
+                                     "margin" : "5px 5px 5px 5px",
+                                     "border-radius" : "0px"}
                             ),
                     html.Div([
                         html.P("Duration"), html.H4(id = "sp_duration")],
                             className="box",
-                            style = {"width" : "auto",
+                            style = {"width" : "22.5%",
+                                     "height" : "100px",
                                      "display" : "inline-block",
-                                     "margin" : "5px"}
+                                     "margin" : "5px 5px 5px 5px",
+                                     "border-radius" : "0px"}
+                            ),
+                    html.Div([
+                        html.P("Artist Genres"), html.H4(id = "sp_genres")],
+                            className="box",
+                            style = {"width" : "97%",
+                                     "height" : "160px",
+                                     "display" : "inline-block",
+                                     "margin" : "5px 5px 0px 0px",
+                                     "border-radius" : "0px"}
                             )
                 ])
             ], className = "column",
