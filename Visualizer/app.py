@@ -29,6 +29,8 @@ import os
 
 import string
 
+import re
+
 #%%
 
 # url = "https://www.1001tracklists.com/tracklist/2rskz669/jstjr-kill-the-noise-night-owl-radio-243-2020-04-11.html"
@@ -104,21 +106,26 @@ app.layout = html.Div(
                 html.H4(children = "Enter a tracklist URL from 1001Tracklists.com",
                         className = "title is-4"),
                 
-                html.Div([
-                    dcc.Input(
-                        id="input_url",
-                        value =  "https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html",
-                        type = "text",
-                        placeholder = "Enter a tracklist URL from 1001Tracklists.com",
-                        debounce = True,
-                        className = "input",
-                        style = {"border-color" : "yellow"}
-                        ),
-                ], style = {"margin" : "0px 0px 10px 0px"}),
+                html.Div(id = "input_control", 
+                         children = [
+                            dcc.Input(
+                                id="input_url",
+                                value =  "https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html",
+                                type = "text",
+                                placeholder = "Enter a tracklist URL from 1001Tracklists.com",
+                                debounce = True,
+                                className = "input",
+                                style = {"border-color" : "yellow"}
+                                ),
+                ], className = "control",
+                    style = {"margin" : "0px 0px 10px 0px"}),
             
-                html.H5(id = "tracklist_name_formatted",
-                        className = "subtitle is-5",
-                        style = {"white-space" : "pre"})
+                dcc.Loading(id = "loading_tracklist_data",
+                            children = [html.H5(id = "tracklist_name_formatted",
+                                                className = "subtitle is-5",
+                                                style = {"white-space" : "pre"})],
+                            type = "dot",
+                            color = "black")
             ]),
         ], className= "box",
             style = {"margin" : "20px 20px 0px 20px"}),
@@ -329,8 +336,7 @@ app.layout = html.Div(
         html.Div(id='tracklist_metrics_mean', style={'display': 'none'}),
         html.Div(id='spotify_default_song', style={'display': 'none'}),
         html.Div(id="song_clicked", style={"display":"none"})
-    ])
-
+    ]) 
 
 @app.callback(
     [Output("tracklist_name", "children"),
@@ -359,7 +365,7 @@ def update_url(url):
     
     tracklist_name = data.iloc[0]["tracklist_name"]
     
-    tracklist_name_formatted = "\n".join(tracklist_name.split(", "))
+    tracklist_name_formatted = "\n".join(re.split(" - |, ", tracklist_name))
     
     data["time"] = data["time"].replace(r'^\s*$', np.nan, regex=True)
     data["time"] = data["time"].ffill()
@@ -379,6 +385,7 @@ def update_url(url):
     
     return(tracklist_name, tracklist_name_formatted, data.to_json(), data_clean.to_json(), data_missing.to_json(), song_genres, data_metric_mean.to_json(), spotify_default_song)
 
+    
 @app.callback(
     Output("tempo_graph", "figure"),
     [Input("tracklist_data_clean", "children")]
