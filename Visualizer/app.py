@@ -27,6 +27,8 @@ import tabulate
 
 import os
 
+import string
+
 #%%
 
 # url = "https://www.1001tracklists.com/tracklist/2rskz669/jstjr-kill-the-noise-night-owl-radio-243-2020-04-11.html"
@@ -114,8 +116,9 @@ app.layout = html.Div(
                         ),
                 ], style = {"margin" : "0px 0px 10px 0px"}),
             
-                html.H5(id = "tracklist_name",
-                        className = "subtitle is-5"),
+                html.H5(id = "tracklist_name_formatted",
+                        className = "subtitle is-5",
+                        style = {"white-space" : "pre"})
             ]),
         ], className= "box",
             style = {"margin" : "20px 20px 0px 20px"}),
@@ -152,7 +155,9 @@ app.layout = html.Div(
                              "background-color" : "black"}),
                 html.Div([
                     html.Div([
-                        html.P("Energy"), html.H4(id = "sp_energy")],
+                        html.P("Energy", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_energy")],
                             className="box",
                             style = {"width" : "30%",
                                      "height" : "100px",
@@ -161,7 +166,9 @@ app.layout = html.Div(
                                      "border-radius" : "0px"}
                             ),
                     html.Div([
-                        html.P("Danceability"), html.H4(id = "sp_danceability")],
+                        html.P("Danceability", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_danceability")],
                             className="box",
                             style = {"width" : "32%",
                                      "height" : "100px",
@@ -170,7 +177,9 @@ app.layout = html.Div(
                                      "border-radius" : "0px"}
                             ),
                     html.Div([
-                        html.P("Valence"), html.H4(id = "sp_valence")],
+                        html.P("Valence", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_valence")],
                             className="box",
                             style = {"width" : "30%",
                                      "height" : "100px",
@@ -179,7 +188,9 @@ app.layout = html.Div(
                                      "border-radius" : "0px"}
                             ),
                     html.Div([
-                        html.P("Instrumentalness"), html.H4(id = "sp_instrumentalness")],
+                        html.P("Instrumentalness", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_instrumentalness")],
                             className="box",
                             style = {"width" : "36%",
                                      "height" : "100px",
@@ -188,7 +199,9 @@ app.layout = html.Div(
                                      "border-radius" : "0px"}
                             ),
                     html.Div([
-                        html.P("Acousticness"), html.H4(id = "sp_acousticness")],
+                        html.P("Acousticness", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_acousticness")],
                             className="box",
                             style = {"width" : "28%",
                                      "height" : "100px",
@@ -197,7 +210,9 @@ app.layout = html.Div(
                                      "border-radius" : "0px"}
                             ),
                     html.Div([
-                        html.P("Speechiness"), html.H4(id = "sp_speechiness")],
+                        html.P("Speechiness", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_speechiness")],
                             className="box",
                             style = {"width" : "28%",
                                      "height" : "100px",
@@ -206,7 +221,9 @@ app.layout = html.Div(
                                      "border-radius" : "0px"}
                             ),
                     html.Div([
-                        html.P("Key"), html.H4(id = "sp_key")],
+                        html.P("Key", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_key")],
                             className="box",
                             style = {"width" : "22.5%",
                                      "height" : "100px",
@@ -215,7 +232,9 @@ app.layout = html.Div(
                                      "border-radius" : "0px"}
                             ),
                     html.Div([
-                        html.P("Mode"), html.H4(id = "sp_mode")],
+                        html.P("Mode", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_mode")],
                             className="box",
                             style = {"width" : "22.5%",
                                      "height" : "100px",
@@ -224,7 +243,9 @@ app.layout = html.Div(
                                      "border-radius" : "0px"}
                             ),
                     html.Div([
-                        html.P("Tempo"), html.H4(id = "sp_tempo")],
+                        html.P("Tempo", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_tempo")],
                             className="box",
                             style = {"width" : "22.5%",
                                      "height" : "100px",
@@ -233,7 +254,9 @@ app.layout = html.Div(
                                      "border-radius" : "0px"}
                             ),
                     html.Div([
-                        html.P("Duration"), html.H4(id = "sp_duration")],
+                        html.P("Duration", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_duration")],
                             className="box",
                             style = {"width" : "22.5%",
                                      "height" : "100px",
@@ -242,7 +265,10 @@ app.layout = html.Div(
                                      "border-radius" : "0px"}
                             ),
                     html.Div([
-                        html.P("Artist Genres"), html.H4(id = "sp_genres")],
+                        html.P("Artist Genres", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_genres",
+                                style = {"white-space" : "pre"})],
                             className="box",
                             style = {"width" : "97%",
                                      "height" : "160px",
@@ -295,6 +321,7 @@ app.layout = html.Div(
         ], className="row", 
             style = dict(display = "flex")),
         
+        html.Div(id='tracklist_name', style = {'display' : 'none'}),
         html.Div(id='tracklist_data', style={'display': 'none'}),
         html.Div(id='tracklist_data_clean', style={'display': 'none'}),
         html.Div(id='tracklist_data_missing', style={'display': 'none'}),
@@ -304,8 +331,10 @@ app.layout = html.Div(
         html.Div(id="song_clicked", style={"display":"none"})
     ])
 
+
 @app.callback(
     [Output("tracklist_name", "children"),
+    Output("tracklist_name_formatted", "children"),
     Output("tracklist_data", "children"),
     Output("tracklist_data_clean", "children"),
     Output("tracklist_data_missing", "children"),
@@ -315,8 +344,6 @@ app.layout = html.Div(
     [Input("input_url", "value")]
 )
 def update_url(url):
-    tracklist_name = url
-    
     if url == "https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html":
         
         print("reading example")
@@ -329,6 +356,10 @@ def update_url(url):
         data = get_data(url)
     
         print("gotten_data")
+    
+    tracklist_name = data.iloc[0]["tracklist_name"]
+    
+    tracklist_name_formatted = "\n".join(tracklist_name.split(", "))
     
     data["time"] = data["time"].replace(r'^\s*$', np.nan, regex=True)
     data["time"] = data["time"].ffill()
@@ -346,7 +377,7 @@ def update_url(url):
     
     spotify_default_song = data_clean.iloc[0][["name", "spotify0"]].to_list()
     
-    return(tracklist_name, data.to_json(), data_clean.to_json(), data_missing.to_json(), song_genres, data_metric_mean.to_json(), spotify_default_song)
+    return(tracklist_name, tracklist_name_formatted, data.to_json(), data_clean.to_json(), data_missing.to_json(), song_genres, data_metric_mean.to_json(), spotify_default_song)
 
 @app.callback(
     Output("tempo_graph", "figure"),
@@ -464,6 +495,113 @@ def update_tempo_graph(data):
     
     return(fig)
 
+# @app.callback(
+#     Output("key_graph", "figure"),
+#     [Input("tracklist_data_clean", "children")]
+# )
+# def update_key_graph(data):
+#     data = pd.read_json(data)
+    
+#     data = data.replace({"mode": 
+#                          {0 : "#212120",
+#                           1 : "#2b72c4"}})
+    
+#     fig = make_subplots(specs=[[{"secondary_y": True}]])
+    
+#     data_key_mean = data.groupby("seconds")["key"].mean()
+#     data_loudness_mean = data.groupby("seconds")["loudness"].mean()
+        
+#     fig.add_trace(
+#         go.Scatter(x = data.seconds,
+#                     y = data.key,
+#                     name = "Key",
+#                     line_shape = "hv",
+#                     line = dict(width = 5,
+#                                 color = "#2bc47d"),
+#                     hoverinfo = "skip"),
+#         secondary_y = True
+#     )
+    
+#     hovertemplate_tempo = """<b>%{customdata[0]}</b><br>Key: %{customdata[1]}<br>Loudness: %{customdata[2]}"""
+    
+#     fig.add_trace(
+#         go.Scatter(x = data.seconds,
+#                     y = data.key,
+#                     customdata = data[["name", "key", "loudness", "spotify0"]].round(2),
+#                     name = "Mode",
+#                     mode = "markers",
+#                     marker = dict(size = 10,
+#                                   color = data["mode"]),
+#                     hovertemplate = hovertemplate_tempo,
+#                     hoverlabel = dict(bgcolor = "white",
+#                                       bordercolor = "white",
+#                                       font_color = "black",
+#                                       namelength = 0)),
+#         secondary_y = True
+#     )
+    
+    
+#     fig.add_trace(
+#         go.Scatter(x = data_loudness_mean.index,
+#                     y = data_loudness_mean,
+#                     name = "Loudness",
+#                     line_shape = "spline",
+#                     line = dict(color = "#212120"),
+#                     hoverinfo = "skip")
+#     )
+        
+#     fig.add_trace(
+#         go.Scatter(x = data_loudness_mean.index,
+#                     y = [data_loudness_mean.min()] * len(data_loudness_mean),
+#                     line_shape = "spline",
+#                     line = dict(color = "#FFFFFF"),
+#                     fill = "tonexty",
+#                     fillcolor = "#888888",
+#                     showlegend = False,
+#                     hoverinfo = "skip")
+#     )
+    
+#     # Add figure title
+#     fig.update_layout(
+#         title_text="Key and Loudness",
+#         xaxis = dict(
+#             showline = True,
+#             showgrid = False,
+#             showticklabels=True,
+#             linecolor='rgb(204, 204, 204)',
+#             linewidth=2,
+#             ticks='outside',
+#             tickfont=dict(
+#                 family='Arial',
+#                 size=11,
+#                 color='rgb(82, 82, 82)'),
+#             tickmode = "array",
+#             tickvals = data.seconds,
+#             ticktext = data.time,
+#             tickangle = 65,
+#             showspikes = True,
+#             spikemode = "across",
+#             spikethickness = 2
+#             ),
+#         yaxis = dict(
+#             showgrid = False,
+#             side = "right"),
+#         yaxis2 = dict(
+#             showgrid = False,
+#             side = "left"),
+#         plot_bgcolor = "white"
+#     )
+    
+#     # Set x-axis title
+#     fig.update_xaxes(title_text="Time")
+    
+#     # Set y-axes titles
+#     fig.update_yaxes(title_text="Decibels", secondary_y=False)
+#     fig.update_yaxes(title_text="Key in Pitch Class Notation", secondary_y=True)
+    
+#     return(fig)
+
+
 @app.callback(
     Output("key_graph", "figure"),
     [Input("tracklist_data_clean", "children")]
@@ -471,55 +609,121 @@ def update_tempo_graph(data):
 def update_key_graph(data):
     data = pd.read_json(data)
     
-    # mode_colors = ["#212120" if mode == 0 else "#2b72c4" for mode in data["mode"]]
+    data = data[data["key"] != -1]
     
-    data = data.replace({"mode": 
-                         {0 : "#212120",
-                          1 : "#2b72c4"}})
+    pitch_to_cam = {(0,1):'8B',
+            		(1,1):'3B',
+            		(2,1):'10B',
+            		(3,1):'5B',
+            		(4,1):'12B',
+            		(5,1):'7B',
+            		(6,1):'2B',
+            		(7,1):'9B',
+            		(8,1):'4B',
+            		(9,1):'11B',
+            		(10,1):'6B',
+            		(11,1):'1B',
+            		(0,0):'5A',
+            		(1,0):'12A',
+            		(2,0):'7A',
+            		(3,0):'2A',
+            		(4,0):'9A',
+            		(5,0):'4A',
+            		(6,0):'11A',
+            		(7,0):'6A',
+            		(8,0):'1A',
+            		(9,0):'8A',
+            		(10,0):'3A',
+            		(11,0):'10A'}
+    
+    pitch_to_cam = {" ".join([str(key[0]), str(key[1])]) : pitch_to_cam[key] for key in pitch_to_cam}
+    
+    data["camelot"] = data["key"].astype(int).astype(str) + " " + data["mode"].astype(int).astype(str)
+    
+    data = data.replace({"camelot": pitch_to_cam})
+    
+    data["camelot_num"] = data["camelot"].str.strip(string.ascii_letters)
+    data["camelot_let"] = data["camelot"].str.strip(string.digits)
+    
+    cam_col_A = "#E95555"
+    cam_col_B = "#55E9E9"
     
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     
     data_key_mean = data.groupby("seconds")["key"].mean()
     data_loudness_mean = data.groupby("seconds")["loudness"].mean()
     
-    # fig.add_trace(
-    #     go.Scatter(x = data_key_mean.index,
-    #                 y = data_key_mean,
-    #                 name = "Key",
-    #                 line_shape = "spline",
-    #                 line = dict(width = 5,
-    #                             color = "#2bc47d")),
-    #     secondary_y = True
-    # )
+    show_in_legend_A = True
+    show_in_legend_B = True
+    for sec0, key0, sec1, key1, letter in zip(data["seconds"].to_list(), data["camelot_num"].to_list(), data.iloc[1:]["seconds"].to_list() + [None], data.iloc[1:]["camelot_num"].to_list() + [None], data["camelot_let"].to_list()):
+        
+        if not sec1:
+            sec1 = sec0 + 60
+            key1 = key0
+        
+        key0 = int(key0)
+        key1 = int(key1)
+        
+        col = letter.replace("A", cam_col_A).replace("B", cam_col_B)
+        
+        if letter == "A":
+            leg_name = "Camelot Letter A"
+            show_leg = show_in_legend_A
+        if letter == "B":
+            leg_name = "Camelot Letter B"
+            show_leg = show_in_legend_B
+        
+        fig.add_trace(
+                go.Scatter(x = [sec0, sec1],
+                           y = [key0, key0],
+                           mode = "lines",
+                           line = dict(width = 5,
+                                       color = col),
+                           hoverinfo = "skip",
+                           name = leg_name,
+                           showlegend = show_leg),
+                secondary_y = True)
+        
+        if key0 < key1:
+            key0 -= 0.12
+            key1 += 0.12
+        else:
+            key0 += 0.12
+            key1 -= 0.12
+        
+        fig.add_trace(
+                go.Scatter(x = [sec1, sec1],
+                           y = [key0, key1],
+                           mode = "lines",
+                           line = dict(width = 5,
+                                       color = col),
+                           hoverinfo = "skip",
+                           showlegend = False),
+                secondary_y = True)
+        
+        if letter == "A":
+            show_in_legend_A = False
+        if letter == "B":
+            show_in_legend_B = False
+    
+    
+    hovertemplate_tempo = """<b>%{customdata[0]}</b><br>Camelot Value: %{customdata[1]}<br>Loudness: %{customdata[2]}"""
     
     fig.add_trace(
         go.Scatter(x = data.seconds,
-                    y = data.key,
-                    name = "Key",
-                    line_shape = "hv",
-                    line = dict(width = 5,
-                                color = "#2bc47d"),
-                    hoverinfo = "skip"),
-        secondary_y = True
-    )
-    
-    hovertemplate_tempo = """<b>%{customdata[0]}</b><br>Key: %{customdata[1]}<br>Loudness: %{customdata[2]}"""
-    
-    fig.add_trace(
-        go.Scatter(x = data.seconds,
-                    y = data.key,
-                    customdata = data[["name", "key", "loudness", "spotify0"]].round(2),
-                    name = "Mode",
+                    y = data.camelot_num,
+                    customdata = data[["name", "camelot", "loudness", "spotify0"]].round(2),
+                    name = "Song",
                     mode = "markers",
+                    showlegend = False,
                     marker = dict(size = 10,
-                                  color = data["mode"]),
+                                  color = "#212120"),
                     hovertemplate = hovertemplate_tempo,
                     hoverlabel = dict(bgcolor = "white",
                                       bordercolor = "white",
                                       font_color = "black",
                                       namelength = 0)),
-        secondary_y = True
-    )
+            secondary_y = True)
     
     
     fig.add_trace(
@@ -528,7 +732,7 @@ def update_key_graph(data):
                     name = "Loudness",
                     line_shape = "spline",
                     line = dict(color = "#212120"),
-                    hoverinfo = "skip")
+                    hoverinfo = "skip"),
     )
         
     fig.add_trace(
@@ -539,21 +743,12 @@ def update_key_graph(data):
                     fill = "tonexty",
                     fillcolor = "#888888",
                     showlegend = False,
-                    hoverinfo = "skip")
+                    hoverinfo = "skip"),
     )
-    # fig.add_trace(
-    #     go.Scatter(x = [0, data.seconds.max()],
-    #                 y =[-100, -100],
-    #                 name = "Loudness",
-    #                 line_shape = "spline",
-    #                 line = dict(color = "#212120"),
-    #                 fill = "toself")
-    # )
-    
     
     # Add figure title
     fig.update_layout(
-        title_text="Key and Loudness",
+        title_text="Harmonic Mixing and Loudness",
         xaxis = dict(
             showline = True,
             showgrid = False,
@@ -586,8 +781,8 @@ def update_key_graph(data):
     fig.update_xaxes(title_text="Time")
     
     # Set y-axes titles
-    fig.update_yaxes(title_text="Decibels", secondary_y=False)
-    fig.update_yaxes(title_text="Key in Pitch Class Notation", secondary_y=True)
+    fig.update_yaxes(title_text="Camelot Number", secondary_y=True)
+    fig.update_yaxes(title_text="Deicbels", secondary_y=False)
     
     return(fig)
 
@@ -670,7 +865,39 @@ def update_song(spotify_default_song, data, click_data_tempo, click_data_key):
     
     song_spotify_embed = SPOTIFY_EMBED_URL_PREFIX + song_clicked_id
     
-    song_spotify_metrics = tuple(data[data["name"] == song_clicked_name][SP_METRICS].round(2).values.tolist()[0])
+    song_spotify_metrics = data[data["name"] == song_clicked_name][SP_METRICS]
+    
+    # Convert milliseconds to time
+    millis = int(song_spotify_metrics["duration_ms"])
+    seconds=(millis/1000)%60
+    seconds = int(seconds)
+    minutes=(millis/(1000*60))%60
+    minutes = int(minutes)
+    hours=(millis/(1000*60*60))%24
+    hours = int(hours)
+    
+    #seconds = f"{seconds:02d}"
+    
+    if hours == 0:
+        song_spotify_metrics["duration_ms"] = "{}:{:02d}".format(minutes, seconds)
+    else:
+        song_spotify_metrics["duration_ms"] = "{}:{}:{:02d}".format(hours, minutes, seconds)
+        
+    if song_spotify_metrics["genres"].values[0]:
+        # Format genres
+        sp_artist_genres = song_spotify_metrics["genres"].values[0].split(",")
+        
+        for i in range(len(sp_artist_genres) - 1):
+            if (i + 1) % 3 == 0:
+                sp_artist_genres[i] += "\n"
+            else:
+                sp_artist_genres[i] += " | "
+        
+        song_spotify_metrics["genres"] = "".join(sp_artist_genres)
+    else:
+        song_spotify_metrics["genres"] = "No Artist Genres Found on Spotify"
+    
+    song_spotify_metrics = tuple(song_spotify_metrics.round(2).values.tolist()[0])
     
     return(song_clicked_name, song_spotify_embed, *song_spotify_metrics)
 
