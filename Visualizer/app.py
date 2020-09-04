@@ -456,7 +456,7 @@ def update_tempo_graph(data):
     
     # Add figure title
     fig.update_layout(
-        title_text="Time Metrics",
+        title_text="Song Tempo and Spotify Metrics",
         xaxis = dict(
             showline = True,
             showgrid = False,
@@ -494,113 +494,6 @@ def update_tempo_graph(data):
     fig.update_yaxes(title_text="Beats per Minute", secondary_y=True)
     
     return(fig)
-
-# @app.callback(
-#     Output("key_graph", "figure"),
-#     [Input("tracklist_data_clean", "children")]
-# )
-# def update_key_graph(data):
-#     data = pd.read_json(data)
-    
-#     data = data.replace({"mode": 
-#                          {0 : "#212120",
-#                           1 : "#2b72c4"}})
-    
-#     fig = make_subplots(specs=[[{"secondary_y": True}]])
-    
-#     data_key_mean = data.groupby("seconds")["key"].mean()
-#     data_loudness_mean = data.groupby("seconds")["loudness"].mean()
-        
-#     fig.add_trace(
-#         go.Scatter(x = data.seconds,
-#                     y = data.key,
-#                     name = "Key",
-#                     line_shape = "hv",
-#                     line = dict(width = 5,
-#                                 color = "#2bc47d"),
-#                     hoverinfo = "skip"),
-#         secondary_y = True
-#     )
-    
-#     hovertemplate_tempo = """<b>%{customdata[0]}</b><br>Key: %{customdata[1]}<br>Loudness: %{customdata[2]}"""
-    
-#     fig.add_trace(
-#         go.Scatter(x = data.seconds,
-#                     y = data.key,
-#                     customdata = data[["name", "key", "loudness", "spotify0"]].round(2),
-#                     name = "Mode",
-#                     mode = "markers",
-#                     marker = dict(size = 10,
-#                                   color = data["mode"]),
-#                     hovertemplate = hovertemplate_tempo,
-#                     hoverlabel = dict(bgcolor = "white",
-#                                       bordercolor = "white",
-#                                       font_color = "black",
-#                                       namelength = 0)),
-#         secondary_y = True
-#     )
-    
-    
-#     fig.add_trace(
-#         go.Scatter(x = data_loudness_mean.index,
-#                     y = data_loudness_mean,
-#                     name = "Loudness",
-#                     line_shape = "spline",
-#                     line = dict(color = "#212120"),
-#                     hoverinfo = "skip")
-#     )
-        
-#     fig.add_trace(
-#         go.Scatter(x = data_loudness_mean.index,
-#                     y = [data_loudness_mean.min()] * len(data_loudness_mean),
-#                     line_shape = "spline",
-#                     line = dict(color = "#FFFFFF"),
-#                     fill = "tonexty",
-#                     fillcolor = "#888888",
-#                     showlegend = False,
-#                     hoverinfo = "skip")
-#     )
-    
-#     # Add figure title
-#     fig.update_layout(
-#         title_text="Key and Loudness",
-#         xaxis = dict(
-#             showline = True,
-#             showgrid = False,
-#             showticklabels=True,
-#             linecolor='rgb(204, 204, 204)',
-#             linewidth=2,
-#             ticks='outside',
-#             tickfont=dict(
-#                 family='Arial',
-#                 size=11,
-#                 color='rgb(82, 82, 82)'),
-#             tickmode = "array",
-#             tickvals = data.seconds,
-#             ticktext = data.time,
-#             tickangle = 65,
-#             showspikes = True,
-#             spikemode = "across",
-#             spikethickness = 2
-#             ),
-#         yaxis = dict(
-#             showgrid = False,
-#             side = "right"),
-#         yaxis2 = dict(
-#             showgrid = False,
-#             side = "left"),
-#         plot_bgcolor = "white"
-#     )
-    
-#     # Set x-axis title
-#     fig.update_xaxes(title_text="Time")
-    
-#     # Set y-axes titles
-#     fig.update_yaxes(title_text="Decibels", secondary_y=False)
-#     fig.update_yaxes(title_text="Key in Pitch Class Notation", secondary_y=True)
-    
-#     return(fig)
-
 
 @app.callback(
     Output("key_graph", "figure"),
