@@ -39,9 +39,9 @@ import re
 
 # url= "https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html"
 
-url = "https://www.1001tracklists.com/tracklist/10ufggtt/wandw-20xx-xr-live-broadcast-li-ning-arena-rave-culture-city-2020-05-23.html"
+# url = "https://www.1001tracklists.com/tracklist/10ufggtt/wandw-20xx-xr-live-broadcast-li-ning-arena-rave-culture-city-2020-05-23.html"
 
-data = get_data(url)
+# data = get_data(url)
 
 #%%
 
@@ -128,7 +128,8 @@ app.layout = html.Div(
                             color = "black")
             ]),
         ], className= "box",
-            style = {"margin" : "20px 20px 0px 20px"}),
+            style = {"margin" : "20px 20px 20px 20px",
+                     "border-radius" : "0px"}),
         
         html.Div([
             html.Div([
@@ -137,7 +138,7 @@ app.layout = html.Div(
                         id = "tempo_graph"
                         ),
                 ], className = "box",
-                    style = {"margin" : "20px 0px 20px 20px",
+                    style = {"margin" : "0px 20px 10px 20px",
                              "border-radius" : "0px"}),
                 
                 html.Div([
@@ -145,9 +146,11 @@ app.layout = html.Div(
                         id = "key_graph"
                         )
                 ], className = "box",
-                    style = {"margin" : "20px 0px 20px 20px",
-                             "border-radius" : "0px"})
-            ], className = "column is-three-quarters"),
+                    style = {"margin" : "20px 20px 10px 20px",
+                             "border-radius" : "0px",
+                             "padding" : "0px"})
+            ], className = "column is-three-quarters",
+                style = {"padding" : "0px"}),
             
             html.Div([
                 html.Div([
@@ -156,9 +159,8 @@ app.layout = html.Div(
                                         "width" : "100%",
                                         "frameborder" : "0",
                                         "allowtransparency" : "True"})
-                ], style = {"width" : "96%",
-                             "height" : "490px",
-                             "margin" : "20px 20px 20px 0px",
+                ], style = {"height" : "490px",
+                             "margin" : "0px 20px 20px 0px",
                              "background-color" : "black"}),
                 html.Div([
                     html.Div([
@@ -167,7 +169,7 @@ app.layout = html.Div(
                         html.H4(id = "sp_energy")],
                             className="box",
                             style = {"width" : "30%",
-                                     "height" : "100px",
+                                     "height" : "90px",
                                      "display" : "inline-block",
                                      "margin" : "0px 5px 5px 0px",
                                      "border-radius" : "0px"}
@@ -178,7 +180,7 @@ app.layout = html.Div(
                         html.H4(id = "sp_danceability")],
                             className="box",
                             style = {"width" : "32%",
-                                     "height" : "100px",
+                                     "height" : "90px",
                                      "display" : "inline-block",
                                      "margin" : "0px 5px 5px 5px",
                                      "border-radius" : "0px"}
@@ -189,7 +191,7 @@ app.layout = html.Div(
                         html.H4(id = "sp_valence")],
                             className="box",
                             style = {"width" : "30%",
-                                     "height" : "100px",
+                                     "height" : "90px",
                                      "display" : "inline-block",
                                      "margin" : "0px 0px 5px 5px",
                                      "border-radius" : "0px"}
@@ -200,7 +202,7 @@ app.layout = html.Div(
                         html.H4(id = "sp_instrumentalness")],
                             className="box",
                             style = {"width" : "36%",
-                                     "height" : "100px",
+                                     "height" : "90px",
                                      "display" : "inline-block",
                                      "margin" : "5px 5px 5px 0px",
                                      "border-radius" : "0px"}
@@ -211,7 +213,7 @@ app.layout = html.Div(
                         html.H4(id = "sp_acousticness")],
                             className="box",
                             style = {"width" : "28%",
-                                     "height" : "100px",
+                                     "height" : "90px",
                                      "display" : "inline-block",
                                      "margin" : "5px 5px 5px 5px",
                                      "border-radius" : "0px"}
@@ -222,7 +224,7 @@ app.layout = html.Div(
                         html.H4(id = "sp_speechiness")],
                             className="box",
                             style = {"width" : "28%",
-                                     "height" : "100px",
+                                     "height" : "90px",
                                      "display" : "inline-block",
                                      "margin" : "5px 5px 5px 5px",
                                      "border-radius" : "0px"}
@@ -233,7 +235,7 @@ app.layout = html.Div(
                         html.H4(id = "sp_key")],
                             className="box",
                             style = {"width" : "22.5%",
-                                     "height" : "100px",
+                                     "height" : "90px",
                                      "display" : "inline-block",
                                      "margin" : "5px 5px 5px 0px",
                                      "border-radius" : "0px"}
@@ -244,7 +246,7 @@ app.layout = html.Div(
                         html.H4(id = "sp_mode")],
                             className="box",
                             style = {"width" : "22.5%",
-                                     "height" : "100px",
+                                     "height" : "90px",
                                      "display" : "inline-block",
                                      "margin" : "5px 5px 5px 5px",
                                      "border-radius" : "0px"}
@@ -255,7 +257,7 @@ app.layout = html.Div(
                         html.H4(id = "sp_tempo")],
                             className="box",
                             style = {"width" : "22.5%",
-                                     "height" : "100px",
+                                     "height" : "90px",
                                      "display" : "inline-block",
                                      "margin" : "5px 5px 5px 5px",
                                      "border-radius" : "0px"}
@@ -266,7 +268,7 @@ app.layout = html.Div(
                         html.H4(id = "sp_duration")],
                             className="box",
                             style = {"width" : "22.5%",
-                                     "height" : "100px",
+                                     "height" : "90px",
                                      "display" : "inline-block",
                                      "margin" : "5px 5px 5px 5px",
                                      "border-radius" : "0px"}
@@ -278,7 +280,7 @@ app.layout = html.Div(
                                 style = {"white-space" : "pre"})],
                             className="box",
                             style = {"width" : "97%",
-                                     "height" : "160px",
+                                     "height" : "150px",
                                      "display" : "inline-block",
                                      "margin" : "5px 5px 0px 0px",
                                      "border-radius" : "0px"}
@@ -286,47 +288,68 @@ app.layout = html.Div(
                 ])
             ], className = "column",
                style = {"height" : "100%",
-                        "width" : "100%"})
+                        "width" : "100%",
+                        "margin" : "0px",
+                        "padding" : "0px"})
             
         ], className = "columns",
-            style = {"height" : "1100px"}),
+            style = {"margin" : "0px"}),
         
         html.Div([
             html.Div([
-                html.H3('Song Genres Word Cloud'),
-                html.Img(id = "image_wc"),
-            ], className="two columns",
-                style = dict(display = "inline-block", align = "left")),
-    
+                html.Figure(className = "image is-2by1", 
+                            children = [html.Img(id = "image_wc",
+                                                 style = {"max-height" : "475px",
+                                                          "max-width" : "950px"})]),
+            ], className = "box column is-7",
+                style = {"margin" : "0px 20px 20px 0px",
+                         "border-radius" : "0px",
+                         "height" : "100%"}),
+
             html.Div([
+                # html.Div([
+                #     html.P("Energy"), html.H4(id = "avg_energy")],
+                #         className="mini_container",
+                #         ),
+                # html.Div([
+                #     html.P("Danceability"), html.H4(id = "avg_danceability")],
+                #         className="mini_container",
+                #         ),
+                # html.Div([
+                #     html.P("Valence"), html.H4(id = "avg_valence")],
+                #         className="mini_container",
+                #         ),
+                # html.Div([
+                #     html.P("Acousticness"), html.H4(id = "avg_acousticness")],
+                #         className="mini_container",
+                #         ),
+                # html.Div([
+                #     html.P("Instrumentalness"), html.H4(id = "avg_instrumentalness")],
+                #         className="mini_container",
+                #         ),
+                # html.Div([
+                #     html.P("Speechiness"), html.H4(id = "avg_speechiness")],
+                #         className="mini_container",
+                #         )
                 html.Div([
-                    html.P("Energy"), html.H4(id = "avg_energy")],
-                        className="mini_container",
-                        ),
+                    html.H1("hello")
+                ], style = {"width" : "100%",
+                            "height" : "25%"}),
+                            
                 html.Div([
-                    html.P("Danceability"), html.H4(id = "avg_danceability")],
-                        className="mini_container",
-                        ),
-                html.Div([
-                    html.P("Valence"), html.H4(id = "avg_valence")],
-                        className="mini_container",
-                        ),
-                html.Div([
-                    html.P("Acousticness"), html.H4(id = "avg_acousticness")],
-                        className="mini_container",
-                        ),
-                html.Div([
-                    html.P("Instrumentalness"), html.H4(id = "avg_instrumentalness")],
-                        className="mini_container",
-                        ),
-                html.Div([
-                    html.P("Speechiness"), html.H4(id = "avg_speechiness")],
-                        className="mini_container",
-                        )
-            ], className="three columns",
-                style = dict(width = "65%", display = "inline-block", align = "right"))
-        ], className="row", 
-            style = dict(display = "flex")),
+                    dcc.Graph(id = "avg_metrics")
+                ], style = {"width" : "100%",
+                            "height" : "72%"})
+                
+                
+            ], className="box column",
+                style = {"margin" : "0px 0px 20px 0px",
+                         "border-radius" : "0px",
+                         "height" : "100%"})
+        ], className="columns",
+            style = {"height" : "500px",
+                     "margin" : "10px 20px 20px 20px"}),
+    
         
         html.Div(id='tracklist_name', style = {'display' : 'none'}),
         html.Div(id='tracklist_data', style={'display': 'none'}),
@@ -686,24 +709,91 @@ def update_key_graph(data):
     
     return(fig)
 
+# @app.callback(
+#     [Output("avg_energy", "children"),
+#      Output("avg_danceability", "children"),
+#      Output("avg_valence", "children"),
+#      Output("avg_acousticness", "children"),
+#      Output("avg_instrumentalness", "children"),
+#      Output("avg_speechiness", "children")],
+#     [Input("tracklist_metrics_mean", "children")]
+# )
+# def update_tracklist_metrics_mean(metrics_mean):
+#     metrics_mean = pd.read_json(metrics_mean, lines = True)
+    
+#     return(float(metrics_mean["energy"].round(3)),
+#            float(metrics_mean["danceability"].round(3)), 
+#            float(metrics_mean["valence"].round(3)), 
+#            float(metrics_mean["acousticness"].round(3)), 
+#            float(metrics_mean["instrumentalness"].round(3)), 
+#            float(metrics_mean["speechiness"].round(3)))
+    
+
 @app.callback(
-    [Output("avg_energy", "children"),
-     Output("avg_danceability", "children"),
-     Output("avg_valence", "children"),
-     Output("avg_acousticness", "children"),
-     Output("avg_instrumentalness", "children"),
-     Output("avg_speechiness", "children")],
+    Output("avg_metrics", "figure"),
     [Input("tracklist_metrics_mean", "children")]
 )
 def update_tracklist_metrics_mean(metrics_mean):
+    METRICS_NAME = ["Energy", "Danceability", "Valence",
+                    "Acousticness", "Instrumentalness", "Speechiness"]
+    
+    METRICS_COLORS = ["#542bc4", "#2b72c4", "#C42BBF",
+                      "#212120", "#A02BC4"," #C42B4E"]
+    
     metrics_mean = pd.read_json(metrics_mean, lines = True)
     
-    return(float(metrics_mean["energy"].round(3)),
-           float(metrics_mean["danceability"].round(3)), 
-           float(metrics_mean["valence"].round(3)), 
-           float(metrics_mean["acousticness"].round(3)), 
-           float(metrics_mean["instrumentalness"].round(3)), 
-           float(metrics_mean["speechiness"].round(3)))
+    metrics_mean = metrics_mean.iloc[0].to_dict()
+    
+    # float(metrics_mean["energy"].round(3)),
+    # float(metrics_mean["danceability"].round(3)), 
+    # float(metrics_mean["valence"].round(3)), 
+    # float(metrics_mean["acousticness"].round(3)), 
+    # float(metrics_mean["instrumentalness"].round(3)), 
+    # float(metrics_mean["speechiness"].round(3))
+    
+    # metrics_name = [metric.lower() for metric in METRICS_NAME]
+    
+    fig = make_subplots(2, 3, 
+                        specs = [[{"type": "pie"}, {"type": "pie"}, {"type": "pie"}],
+                                 [{"type": "pie"}, {"type": "pie"}, {"type": "pie"}]],
+                        subplot_titles = METRICS_NAME)
+    
+    metric_vals = []
+    
+    for i, metric in enumerate(METRICS_NAME):
+        val = metrics_mean[metric.lower()]
+        
+        print(metric, val)
+        
+        fig.add_trace(
+            go.Pie(values = [1 - val, val], 
+                   name = metric,
+                   textinfo = "none",
+                   # marker_colors = ["white", "red"],
+                   direction = "clockwise",
+                   sort = False,
+                   marker = dict(colors = ["white", METRICS_COLORS[i]],
+                                 line = dict(color = METRICS_COLORS[i],
+                                 width = 0.75))),
+            row = i//3 + 1, col = (i % 3) + 1)
+        
+        metric_vals.append(round(val, 2))
+    
+    fig.update_traces(hole = 0.65, 
+                      hoverinfo = "skip")
+    
+    fig.update_layout(showlegend = False,
+                      paper_bgcolor='rgba(0,0,0,0)',
+                      plot_bgcolor='rgba(0,0,0,0)',
+                      margin = dict(l = 20, r = 20, b = 100, t = 25, pad = 0),
+                      annotations = fig["layout"]["annotations"] + (dict(text = "{:.2f}".format(metric_vals[0]), x = 0.118, y = 0.857, font_size = 16, showarrow = False),
+                                                                    dict(text = "{:.2f}".format(metric_vals[1]), x = 0.5, y = 0.857, font_size = 16, showarrow = False),
+                                                                    dict(text = "{:.2f}".format(metric_vals[2]), x = 0.885, y = 0.857, font_size = 16, showarrow = False),
+                                                                    dict(text = "{:.2f}".format(metric_vals[3]), x = 0.118, y = 0.153, font_size = 16, showarrow = False),
+                                                                    dict(text = "{:.2f}".format(metric_vals[4]), x = 0.5, y = 0.153, font_size = 16, showarrow = False),
+                                                                    dict(text = "{:.2f}".format(metric_vals[5]), x = 0.885, y = 0.153, font_size = 16, showarrow = False)))
+    
+    return(fig)
     
 
 @app.callback(
@@ -715,7 +805,9 @@ def make_word_cloud(song_genres):
 
     wordcloud = WordCloud(background_color = "white", 
                           relative_scaling = 0.175,
-                          scale =  1.5, 
+                          height = 500,
+                          width = 1000,
+                          scale = 1,
                           repeat = True, 
                           max_words = 300,
                           min_font_size = 3).generate_from_frequencies(song_genres_dict)
