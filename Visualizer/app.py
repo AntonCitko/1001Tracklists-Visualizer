@@ -14,54 +14,12 @@ import numpy as np
 
 from wordcloud import WordCloud
 
-# import dash
-# import dash.dependencies as dd
-# import dash_core_components as dcc
-# import dash_html_components as html
-
 from io import BytesIO
-
 import base64
-
 import tabulate
-
 import os
-
 import string
-
 import re
-
-#%%
-
-# url = "https://www.1001tracklists.com/tracklist/2rskz669/jstjr-kill-the-noise-night-owl-radio-243-2020-04-11.html"
-
-#url = "https://www.1001tracklists.com/tracklist/2vhlqun9/louis-the-child-alison-wonderland-night-owl-radio-236-2020-02-22.html"
-
-# url= "https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html"
-
-# url = "https://www.1001tracklists.com/tracklist/10ufggtt/wandw-20xx-xr-live-broadcast-li-ning-arena-rave-culture-city-2020-05-23.html"
-
-# data = get_data(url)
-
-#%%
-
-# data["time"] = data["time"].replace(r'^\s*$', np.nan, regex=True)
-# data["time"] = data["time"].ffill()
-# data["time"] = data["time"].str.strip()
-# data["seconds"] = data["time"].apply(time_to_sec)
-
-# data_missing = data[data["tempo"].isnull()]
-
-# data_clean = data.dropna(subset = ["tempo"])
-
-# song_genres = data["genres"].dropna().to_list()
-# song_genres = [genre for genre_list in song_genres for genre in genre_list.split(",") if genre]
-
-# data_metric_mean = data_clean[["acousticness", "instrumentalness", "speechiness", "danceability", "energy", "valence"]].mean()
-
-# spotify_default_song = data.iloc[0][["name", "spotify0"]].to_list()
-
-#%%
 
 def time_to_sec(time):
     
@@ -75,8 +33,6 @@ def time_to_sec(time):
         seconds += int(time) * (60 ** i)
     
     return(seconds)
-
-#%%
 
 app = dash.Dash(__name__)
 
@@ -123,7 +79,9 @@ app.layout = html.Div(
                 dcc.Loading(id = "loading_tracklist_data",
                             children = [html.H5(id = "tracklist_name_formatted",
                                                 className = "subtitle is-5",
-                                                style = {"white-space" : "pre"})],
+                                                style = {"white-space" : "pre"}),
+                                        html.H6(id = "song_data_found_ratio",
+                                                className = "subtitle is-5")],
                             type = "dot",
                             color = "black")
             ]),
@@ -297,43 +255,40 @@ app.layout = html.Div(
         
         html.Div([
             html.Div([
-                html.Figure(className = "image is-2by1", 
-                            children = [html.Img(id = "image_wc",
-                                                 style = {"max-height" : "475px",
-                                                          "max-width" : "950px"})]),
+                    html.Figure(className = "image is-2by1", 
+                                children = [html.Img(id = "image_wc",
+                                                     style = {"max-height" : "475px",
+                                                              "max-width" : "950px",
+                                                              "margins" : "auto"})],
+                                style = {"max-width" : "950px",
+                                         "max-height" : "475px",
+                                         "margin" : "auto"}),
             ], className = "box column is-7",
                 style = {"margin" : "0px 20px 20px 0px",
                          "border-radius" : "0px",
-                         "height" : "100%"}),
+                         "height" : "500px"}),
 
             html.Div([
-                # html.Div([
-                #     html.P("Energy"), html.H4(id = "avg_energy")],
-                #         className="mini_container",
-                #         ),
-                # html.Div([
-                #     html.P("Danceability"), html.H4(id = "avg_danceability")],
-                #         className="mini_container",
-                #         ),
-                # html.Div([
-                #     html.P("Valence"), html.H4(id = "avg_valence")],
-                #         className="mini_container",
-                #         ),
-                # html.Div([
-                #     html.P("Acousticness"), html.H4(id = "avg_acousticness")],
-                #         className="mini_container",
-                #         ),
-                # html.Div([
-                #     html.P("Instrumentalness"), html.H4(id = "avg_instrumentalness")],
-                #         className="mini_container",
-                #         ),
-                # html.Div([
-                #     html.P("Speechiness"), html.H4(id = "avg_speechiness")],
-                #         className="mini_container",
-                #         )
                 html.Div([
-                    html.H1("hello")
-                ], style = {"width" : "100%",
+                    html.Div([
+                        html.H6("Average Song Tempo",
+                                className = "title is-6"),
+                        html.P(id = "avg_tempo")
+                    ], className = "column"),
+                                
+                    html.Div([
+                        html.H6("Most Common Camelot Key",
+                                className = "title is-6"),
+                        html.P(id = "avg_camelot")
+                    ], className = "column"),
+    
+                    html.Div([
+                        html.H6("Average Song Loudness",
+                                className = "title is-6"),
+                        html.P(id = "avg_loud")
+                    ], className = "column"),
+                ], className = "columns has-text-centered",
+                   style = {"width" : "100%",
                             "height" : "25%"}),
                             
                 html.Div([
@@ -346,9 +301,9 @@ app.layout = html.Div(
                 style = {"margin" : "0px 0px 20px 0px",
                          "border-radius" : "0px",
                          "height" : "100%"})
-        ], className="columns",
+        ], className="columns is-centered",
             style = {"height" : "500px",
-                     "margin" : "10px 20px 20px 20px"}),
+                     "margin" : "10px 16px 20px 20px"}),
     
         
         html.Div(id='tracklist_name', style = {'display' : 'none'}),
@@ -369,7 +324,10 @@ app.layout = html.Div(
     Output("tracklist_data_missing", "children"),
     Output("song_genres", "children"),
     Output("tracklist_metrics_mean", "children"),
-    Output("spotify_default_song", "children")],
+    Output("spotify_default_song", "children"),
+    Output("avg_tempo", "children"),
+    Output("avg_loud", "children"),
+    Output("song_data_found_ratio", "children")],
     [Input("input_url", "value")]
 )
 def update_url(url):
@@ -406,7 +364,16 @@ def update_url(url):
     
     spotify_default_song = data_clean.iloc[0][["name", "spotify0"]].to_list()
     
-    return(tracklist_name, tracklist_name_formatted, data.to_json(), data_clean.to_json(), data_missing.to_json(), song_genres, data_metric_mean.to_json(), spotify_default_song)
+    avg_tempo = str(round(data_clean["tempo"].mean(), 0)) + " BPM"
+    
+    avg_loud = str(round(data_clean["loudness"].mean(), 2)) + " dB"
+    
+    songs_total = data.shape[0]
+    songs_found = data_clean.shape[0]
+    
+    song_data_found_ratio = "Found " + str(songs_found) + " of " + str(songs_total) + " songs"
+    
+    return(tracklist_name, tracklist_name_formatted, data.to_json(), data_clean.to_json(), data_missing.to_json(), song_genres, data_metric_mean.to_json(), spotify_default_song, avg_tempo, avg_loud, song_data_found_ratio)
 
     
 @app.callback(
@@ -526,7 +493,8 @@ def update_tempo_graph(data):
     return(fig)
 
 @app.callback(
-    Output("key_graph", "figure"),
+    [Output("key_graph", "figure"),
+     Output("avg_camelot", "children")],
     [Input("tracklist_data_clean", "children")]
 )
 def update_key_graph(data):
@@ -564,6 +532,7 @@ def update_key_graph(data):
     data["camelot"] = data["key"].astype(int).astype(str) + " " + data["mode"].astype(int).astype(str)
     
     data = data.replace({"camelot": pitch_to_cam})
+    avg_camelot = " ".join(data["camelot"].mode())
     
     data["camelot_num"] = data["camelot"].str.strip(string.ascii_letters)
     data["camelot_let"] = data["camelot"].str.strip(string.digits)
@@ -707,27 +676,7 @@ def update_key_graph(data):
     fig.update_yaxes(title_text="Camelot Number", secondary_y=True)
     fig.update_yaxes(title_text="Deicbels", secondary_y=False)
     
-    return(fig)
-
-# @app.callback(
-#     [Output("avg_energy", "children"),
-#      Output("avg_danceability", "children"),
-#      Output("avg_valence", "children"),
-#      Output("avg_acousticness", "children"),
-#      Output("avg_instrumentalness", "children"),
-#      Output("avg_speechiness", "children")],
-#     [Input("tracklist_metrics_mean", "children")]
-# )
-# def update_tracklist_metrics_mean(metrics_mean):
-#     metrics_mean = pd.read_json(metrics_mean, lines = True)
-    
-#     return(float(metrics_mean["energy"].round(3)),
-#            float(metrics_mean["danceability"].round(3)), 
-#            float(metrics_mean["valence"].round(3)), 
-#            float(metrics_mean["acousticness"].round(3)), 
-#            float(metrics_mean["instrumentalness"].round(3)), 
-#            float(metrics_mean["speechiness"].round(3)))
-    
+    return(fig, avg_camelot)
 
 @app.callback(
     Output("avg_metrics", "figure"),
@@ -744,15 +693,6 @@ def update_tracklist_metrics_mean(metrics_mean):
     
     metrics_mean = metrics_mean.iloc[0].to_dict()
     
-    # float(metrics_mean["energy"].round(3)),
-    # float(metrics_mean["danceability"].round(3)), 
-    # float(metrics_mean["valence"].round(3)), 
-    # float(metrics_mean["acousticness"].round(3)), 
-    # float(metrics_mean["instrumentalness"].round(3)), 
-    # float(metrics_mean["speechiness"].round(3))
-    
-    # metrics_name = [metric.lower() for metric in METRICS_NAME]
-    
     fig = make_subplots(2, 3, 
                         specs = [[{"type": "pie"}, {"type": "pie"}, {"type": "pie"}],
                                  [{"type": "pie"}, {"type": "pie"}, {"type": "pie"}]],
@@ -762,8 +702,6 @@ def update_tracklist_metrics_mean(metrics_mean):
     
     for i, metric in enumerate(METRICS_NAME):
         val = metrics_mean[metric.lower()]
-        
-        print(metric, val)
         
         fig.add_trace(
             go.Pie(values = [1 - val, val], 
@@ -795,7 +733,6 @@ def update_tracklist_metrics_mean(metrics_mean):
     
     return(fig)
     
-
 @app.callback(
     Output('image_wc', 'src'), 
     [Input('song_genres', 'children')]
@@ -817,7 +754,6 @@ def make_word_cloud(song_genres):
     img = BytesIO()
     image.save(img, format='PNG')
     return 'data:image/png;base64,{}'.format(base64.b64encode(img.getvalue()).decode())
-
 
 @app.callback(
     [Output("song_clicked", "children"),
@@ -892,17 +828,6 @@ def update_song(spotify_default_song, data, click_data_tempo, click_data_key):
     song_spotify_metrics = tuple(song_spotify_metrics.round(2).values.tolist()[0])
     
     return(song_clicked_name, song_spotify_embed, *song_spotify_metrics)
-
-
-
-
-
-
-
-
-
-
-
 
 
 if __name__ == "__main__":
