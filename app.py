@@ -34,6 +34,8 @@ def time_to_sec(time):
 
 app = dash.Dash(__name__)
 
+server = app.server
+
 app.layout = html.Div(
     style = {
         "background-image" : 'url("/assets/smiley-pattern1.jpg")',
