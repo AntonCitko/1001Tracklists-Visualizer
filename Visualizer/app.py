@@ -3,7 +3,6 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 
-import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
@@ -16,7 +15,6 @@ from wordcloud import WordCloud
 
 from io import BytesIO
 import base64
-import tabulate
 import os
 import string
 import re
