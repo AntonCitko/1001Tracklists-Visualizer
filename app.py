@@ -312,7 +312,6 @@ app.layout = html.Div(
         html.Div(id='tracklist_data_missing', style={'display': 'none'}),
         html.Div(id='song_genres', style={'display': 'none'}),
         html.Div(id='tracklist_metrics_mean', style={'display': 'none'}),
-        html.Div(id='spotify_default_song', style={'display': 'none'}),
         html.Div(id="song_clicked", style={"display":"none"})
     ]) 
 
@@ -324,7 +323,6 @@ app.layout = html.Div(
     Output("tracklist_data_missing", "children"),
     Output("song_genres", "children"),
     Output("tracklist_metrics_mean", "children"),
-    Output("spotify_default_song", "children"),
     Output("avg_tempo", "children"),
     Output("avg_loud", "children"),
     Output("song_data_found_ratio", "children")],
@@ -362,8 +360,6 @@ def update_url(url):
     
     data_metric_mean = data_clean[["acousticness", "instrumentalness", "speechiness", "danceability", "energy", "valence"]].mean()
     
-    spotify_default_song = data_clean.iloc[0][["name", "spotify0"]].to_list()
-    
     avg_tempo = str(round(data_clean["tempo"].mean(), 0)) + " BPM"
     
     avg_loud = str(round(data_clean["loudness"].mean(), 2)) + " dB"
@@ -373,7 +369,7 @@ def update_url(url):
     
     song_data_found_ratio = "Found " + str(songs_found) + " of " + str(songs_total) + " songs"
     
-    return(tracklist_name, tracklist_name_formatted, data.to_json(), data_clean.to_json(), data_missing.to_json(), song_genres, data_metric_mean.to_json(), spotify_default_song, avg_tempo, avg_loud, song_data_found_ratio)
+    return(tracklist_name, tracklist_name_formatted, data.to_json(), data_clean.to_json(), data_missing.to_json(), song_genres, data_metric_mean.to_json(), avg_tempo, avg_loud, song_data_found_ratio)
 
     
 @app.callback(
@@ -769,12 +765,11 @@ def make_word_cloud(song_genres):
      Output("sp_tempo", "children"),
      Output("sp_genres", "children"),
      Output("sp_duration", "children")],
-    [Input("spotify_default_song", "children"),
-     Input("tracklist_data_clean", "children"),
+    [Input("tracklist_data_clean", "children"),
      Input("tempo_graph", "clickData"),
      Input("key_graph", "clickData")]
 )
-def update_song(spotify_default_song, data, click_data_tempo, click_data_key):
+def update_song(data, click_data_tempo, click_data_key):
     ctx = dash.callback_context
     
     data = pd.read_json(data)
@@ -782,7 +777,9 @@ def update_song(spotify_default_song, data, click_data_tempo, click_data_key):
     SPOTIFY_EMBED_URL_PREFIX = "https://open.spotify.com/embed/track/"
     SP_METRICS = ["energy", "danceability", "valence", "acousticness", "instrumentalness", "speechiness", "key", "mode", "tempo", "genres", "duration_ms"]
     
-    if ctx.triggered[0]["prop_id"] == "spotify_default_song.children":
+    if ctx.triggered[0]["prop_id"] == "tracklist_data_clean.children":
+        spotify_default_song = data.iloc[0][["name", "spotify0"]].to_list()
+        
         song_clicked_name = spotify_default_song[0]
         song_clicked_id = spotify_default_song[1]
         
@@ -803,8 +800,6 @@ def update_song(spotify_default_song, data, click_data_tempo, click_data_key):
     minutes = int(minutes)
     hours=(millis/(1000*60*60))%24
     hours = int(hours)
-    
-    #seconds = f"{seconds:02d}"
     
     if hours == 0:
         song_spotify_metrics["duration_ms"] = "{}:{:02d}".format(minutes, seconds)
