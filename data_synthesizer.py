@@ -1,10 +1,9 @@
 import sys
 import os
 
-sys.path.append(os.path.abspath('../TrackList'))
+# sys.path.append(os.path.abspath('../TrackList'))
 
-from tracklists_data import *
-from spotify_metrics import *
+from TrackList import *
 
 def get_data(url):
     tl = trackList(url)
