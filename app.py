@@ -670,7 +670,7 @@ def update_key_graph(data):
     
     # Set y-axes titles
     fig.update_yaxes(title_text="Camelot Number", secondary_y=True)
-    fig.update_yaxes(title_text="Deicbels", secondary_y=False)
+    fig.update_yaxes(title_text="Decibels", secondary_y=False)
     
     return(fig, avg_camelot)
 
