@@ -9,7 +9,7 @@ The goal of this project is to create a dashboard that visualizes tracklists fro
 * Click songs on the graphs to view its specific metrics
 
 ## Notes
-* The app works by pulling song features from Spotify's API so tracklists' without Spotify links for their songs will be incomplete
+* The app works by pulling song features from Spotify's API so tracklists without Spotify links for their songs will be incomplete
 * More information on Spotify's song metrics can be found at: https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/
 * More information on the Camelot Wheel can be found at: https://mixedinkey.com/harmonic-mixing-guide/
 
