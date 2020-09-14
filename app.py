@@ -39,7 +39,7 @@ server = app.server
 app.layout = html.Div(
     style = {
         "background-image" : 'url("/assets/smiley-pattern1.jpg")',
-        "background-repeate" : "repeat-y",
+        "background-repeate" : "repeat",
         "background-size" : "200px 200px"
         },
     
@@ -96,7 +96,7 @@ app.layout = html.Div(
                         id = "tempo_graph"
                         ),
                 ], className = "box",
-                    style = {"margin" : "0px 20px 10px 20px",
+                    style = {"margin" : "0px 0px 10px 0px",
                              "border-radius" : "0px"}),
                 
                 html.Div([
@@ -104,11 +104,13 @@ app.layout = html.Div(
                         id = "key_graph"
                         )
                 ], className = "box",
-                    style = {"margin" : "20px 20px 10px 20px",
+                    style = {"margin" : "10px 0px 0px 0px",
                              "border-radius" : "0px",
                              "padding" : "0px"})
-            ], className = "column is-three-quarters",
-                style = {"padding" : "0px"}),
+            ], className = "column",
+                style = {"padding" : "0px",
+                         "min-width" : "450px",
+                         "margin" : "0px 10px 10px 10px"}),
             
             html.Div([
                 html.Div([
@@ -118,7 +120,7 @@ app.layout = html.Div(
                                         "frameborder" : "0",
                                         "allowtransparency" : "True"})
                 ], style = {"height" : "490px",
-                             "margin" : "0px 20px 20px 0px",
+                             "margin" : "0px 0px 10px 0px",
                              "background-color" : "black"}),
                 html.Div([
                     html.Div([
@@ -137,7 +139,7 @@ app.layout = html.Div(
                                style = {"font-weight" : "bold"}), 
                         html.H4(id = "sp_danceability")],
                             className="box",
-                            style = {"width" : "32%",
+                            style = {"width" : "35.5%",
                                      "height" : "90px",
                                      "display" : "inline-block",
                                      "margin" : "0px 5px 5px 5px",
@@ -159,7 +161,7 @@ app.layout = html.Div(
                                style = {"font-weight" : "bold"}), 
                         html.H4(id = "sp_instrumentalness")],
                             className="box",
-                            style = {"width" : "36%",
+                            style = {"width" : "39.5%",
                                      "height" : "90px",
                                      "display" : "inline-block",
                                      "margin" : "5px 5px 5px 0px",
@@ -184,7 +186,7 @@ app.layout = html.Div(
                             style = {"width" : "28%",
                                      "height" : "90px",
                                      "display" : "inline-block",
-                                     "margin" : "5px 5px 5px 5px",
+                                     "margin" : "5px 0px 5px 5px",
                                      "border-radius" : "0px"}
                             ),
                     html.Div([
@@ -225,10 +227,10 @@ app.layout = html.Div(
                                style = {"font-weight" : "bold"}), 
                         html.H4(id = "sp_duration")],
                             className="box",
-                            style = {"width" : "22.5%",
+                            style = {"width" : "25.8%",
                                      "height" : "90px",
                                      "display" : "inline-block",
-                                     "margin" : "5px 5px 5px 5px",
+                                     "margin" : "5px 0px 5px 5px",
                                      "border-radius" : "0px"}
                             ),
                     html.Div([
@@ -237,73 +239,98 @@ app.layout = html.Div(
                         html.H4(id = "sp_genres",
                                 style = {"white-space" : "pre"})],
                             className="box",
-                            style = {"width" : "97%",
+                            style = {"width" : "100%",
                                      "height" : "150px",
                                      "display" : "inline-block",
-                                     "margin" : "5px 5px 0px 0px",
+                                     "margin" : "5px 0px 0px 0px",
                                      "border-radius" : "0px"}
                             )
                 ])
             ], className = "column",
                style = {"height" : "100%",
-                        "width" : "100%",
-                        "margin" : "0px",
+                        "min-width" : "450px",
+                        "max-width" : "450px",
+                        "margin" : "0px 10px 10px 10px",
                         "padding" : "0px"})
             
-        ], className = "columns",
-            style = {"margin" : "0px"}),
+        ], className = "columns is-desktop",
+            style = {"margin" : "0px 10px 0px 10px"}),
         
         html.Div([
-            html.Div([
-                    html.Figure(className = "image is-2by1", 
-                                children = [html.Img(id = "image_wc",
-                                                     style = {"max-height" : "475px",
-                                                              "max-width" : "950px",
-                                                              "margins" : "auto"})],
-                                style = {"max-width" : "950px",
-                                         "max-height" : "475px",
-                                         "margin" : "auto"}),
-            ], className = "box column is-7",
-                style = {"margin" : "0px 20px 20px 0px",
+            html.Div(id = "wordcloud_box",
+                     children = [
+                        html.Figure(className = "image", 
+                                    children = [html.Img(id = "image_wc",
+                                                         style = {"margins" : "auto",
+                                                                  "max-height" : "500px",
+                                                                  "max-width" : "1300px"})],
+                                    style = {"margin" : "auto",
+                                             "max-height" : "500px"}),
+            ], className = "box column",
+                style = {"margin" : "0px 10px 10px 10px",
                          "border-radius" : "0px",
-                         "height" : "500px"}),
+                         "padding" : "0px",
+                         "height" : "500px",
+                         "max-width" : "100%"}),
 
             html.Div([
                 html.Div([
                     html.Div([
-                        html.H6("Average Song Tempo",
-                                className = "title is-6"),
-                        html.P(id = "avg_tempo")
-                    ], className = "column"),
-                                
+                        html.Div([
+                            html.H6("Average Song Tempo",
+                                    className = "title is-6"),
+                        ], className = "column"),
+                                    
+                        html.Div([
+                            html.H6("Most Common Camelot Key",
+                                    className = "title is-6"),
+                        ], className = "column"),
+        
+                        html.Div([
+                            html.H6("Average Song Loudness",
+                                    className = "title is-6"),
+                        ], className = "column"),
+                    ], className = "columns has-text-centered",
+                       style = {"width" : "100%",
+                                "height" : "25%"}),
                     html.Div([
-                        html.H6("Most Common Camelot Key",
-                                className = "title is-6"),
-                        html.P(id = "avg_camelot")
-                    ], className = "column"),
-    
-                    html.Div([
-                        html.H6("Average Song Loudness",
-                                className = "title is-6"),
-                        html.P(id = "avg_loud")
-                    ], className = "column"),
-                ], className = "columns has-text-centered",
-                   style = {"width" : "100%",
-                            "height" : "25%"}),
+                        html.Div([
+                            html.P(id = "avg_tempo")
+                        ], className = "column"),
+                                    
+                        html.Div([
+                            html.P(id = "avg_camelot")
+                        ], className = "column"),
+        
+                        html.Div([
+                            html.P(id = "avg_loud")
+                        ], className = "column"),
+                    ], className = "columns has-text-centered",
+                       style = {"width" : "100%",
+                                "height" : "50px"})
+                
+                ], className = "box",
+                   style = {"border-radius" : "0px",
+                            "width" : "100%",
+                            "margin" : "0px 0px 10px 0px"}),
                             
                 html.Div([
                     dcc.Graph(id = "avg_metrics")
-                ], style = {"width" : "100%",
-                            "height" : "72%"})
+                ],  className = "box",
+                    style = {"width" : "100%",
+                            "height" : "380px",
+                            "border-radius" : "0px",
+                            "padding" : "8px"})
                 
-                
-            ], className="box column",
-                style = {"margin" : "0px 0px 20px 0px",
-                         "border-radius" : "0px",
-                         "height" : "100%"})
-        ], className="columns is-centered",
-            style = {"height" : "500px",
-                     "margin" : "10px 16px 20px 20px"}),
+            ], className="column",
+                style = {"margin" : "0px 10px 10px 10px",
+                         "height" : "500px",
+                         "min-width" : "725px",
+                         "max-width" : "100%",
+                         "padding" : "0px"})
+        ], className="columns is-desktop",
+            style = {"margin" : "10px 10px 0px 10px",
+                     "padding" : "0px 0px 20px 0px"}),
     
         
         html.Div(id='tracklist_name', style = {'display' : 'none'}),
@@ -312,7 +339,9 @@ app.layout = html.Div(
         html.Div(id='tracklist_data_missing', style={'display': 'none'}),
         html.Div(id='song_genres', style={'display': 'none'}),
         html.Div(id='tracklist_metrics_mean', style={'display': 'none'}),
-        html.Div(id="song_clicked", style={"display":"none"})
+        html.Div(id="song_clicked", style={"display":"none"}),
+        html.Div(id="size", style={"display":"none"}),
+        dcc.Location(id="url")
     ]) 
 
 @app.callback(
@@ -729,17 +758,34 @@ def update_tracklist_metrics_mean(metrics_mean):
     
     return(fig)
     
+
+app.clientside_callback(
+    """
+    function(input_url, url) {
+        var elmnt = document.getElementById("wordcloud_box");
+        var width = elmnt.offsetWidth;
+        //width = window.innerWidth;
+        
+        return(width);
+    }
+    """,
+    Output('size', 'children'),
+    [Input('input_url', 'value'),
+     Input("url", "href")]
+)
+
 @app.callback(
     Output('image_wc', 'src'), 
-    [Input('song_genres', 'children')]
+    [Input('song_genres', 'children'),
+     Input("size", "children")]
 )
-def make_word_cloud(song_genres):
+def make_word_cloud(song_genres, width):
     song_genres_dict = pd.Series(song_genres).value_counts().to_dict()
 
     wordcloud = WordCloud(background_color = "white", 
                           relative_scaling = 0.175,
                           height = 500,
-                          width = 1000,
+                          width = width,
                           scale = 1,
                           repeat = True, 
                           max_words = 300,
