@@ -59,8 +59,44 @@ app.layout = html.Div(
         
         html.Div([
             html.Div([
-                html.H4(children = "Enter a tracklist URL from 1001Tracklists.com",
-                        className = "title is-4"),
+                html.H4(children = "Enter a tracklist URL from 1001Tracklists.com or select an example",
+                        className = "title is-4",
+                        style = {'margin' : "0px 0px 12px 0px"}),
+                
+                html.Button(children = "Zeds Dead @ circuitGROUNDS",
+                            id = "zeds_button",
+                            n_clicks = 0,
+                            className = "button is-black is-rounded",
+                            style = {'margin': '0px 5px 10px 0px',
+                                     "background-color" : '#248837'}),
+                
+                html.Button(children = "Hardwell @ Mainstage",
+                            id = 'hardwell_button',
+                            n_clicks = 0,
+                            className = "button is-black is-rounded",
+                            style = {'margin': '0px 5px 10px 0px',
+                                     'background-color' : "#5F4889"}),
+                
+                html.Button(children = "Cosmic Gate @ ASOT Stage",
+                            id = 'cosmic_button',
+                            n_clicks = 0,
+                            className = "button is-black is-rounded",
+                            style = {'margin': '0px 5px 10px 0px',
+                                     'background-color' : "#8C292B"}),
+                
+                html.Button(children = "Justice @ Google I/O",
+                            id = 'justice_button',
+                            n_clicks = 0,
+                            className = "button is-black is-rounded",
+                            style = {'margin': '0px 5px 10px 0px',
+                                     'background-color' : '#B3905F'}),
+                
+                html.Button(children = "Seven Lions & Habstrakt - Night Owl Radio",
+                            id = 'nightowl_button',
+                            n_clicks = 0,
+                            className = "button is-black is-rounded",
+                            style = {'margin': '0px 0px 0px 0px',
+                                     'background-color' : '#1D8F83'}),
                 
                 html.Div(id = "input_control", 
                          children = [
@@ -263,7 +299,7 @@ app.layout = html.Div(
                                     children = [html.Img(id = "image_wc",
                                                          style = {"margins" : "auto",
                                                                   "max-height" : "500px",
-                                                                  "max-width" : "1300px"})],
+                                                                  "max-width" : "1000px"})],
                                     style = {"margin" : "auto",
                                              "max-height" : "500px"}),
             ], className = "box column",
@@ -345,6 +381,28 @@ app.layout = html.Div(
     ]) 
 
 @app.callback(
+    Output("input_url", "value"),
+    [Input("zeds_button", "n_clicks"),
+     Input("hardwell_button", "n_clicks"),
+     Input("cosmic_button", "n_clicks"),
+     Input("justice_button", "n_clicks"),
+     Input("nightowl_button", "n_clicks")]
+)
+def update_example(zeds, hardwell, cosmic, justice, nightowl):
+    changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
+    
+    example_buttons = {"." : "https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html",
+                        "zeds_button.n_clicks" : "https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html",
+                        "hardwell_button.n_clicks" : "https://www.1001tracklists.com/tracklist/1ldcw1rk/hardwell-mainstage-ultra-music-festival-miami-united-states-2016-03-19.html",
+                        "cosmic_button.n_clicks" : "https://www.1001tracklists.com/tracklist/1r4qp141/cosmic-gate-asot-stage-tomorrowland-weekend-2-belgium-2019-07-28.html",
+                        "justice_button.n_clicks" : "https://www.1001tracklists.com/tracklist/zu8mtf9/justice-google-islasho-united-states-2018-05-10.html",
+                        "nightowl_button.n_clicks" : "https://www.1001tracklists.com/tracklist/2l5u0mu9/seven-lions-habstrakt-night-owl-radio-245-2020-04-24.html"}
+    
+    url = example_buttons[changed_id]
+    
+    return(url)
+
+@app.callback(
     [Output("tracklist_name", "children"),
     Output("tracklist_name_formatted", "children"),
     Output("tracklist_data", "children"),
@@ -358,18 +416,25 @@ app.layout = html.Div(
     [Input("input_url", "value")]
 )
 def update_url(url):
-    if url == "https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html":
+    
+    example_urls = {"https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html" : "zeds_dead_example.csv",
+                    "https://www.1001tracklists.com/tracklist/1r4qp141/cosmic-gate-asot-stage-tomorrowland-weekend-2-belgium-2019-07-28.html" : "cosmic_gate_example.csv",
+                    "https://www.1001tracklists.com/tracklist/zu8mtf9/justice-google-islasho-united-states-2018-05-10.html" : "justice_example.csv",
+                    "https://www.1001tracklists.com/tracklist/2l5u0mu9/seven-lions-habstrakt-night-owl-radio-245-2020-04-24.html" : "night_owl_radio_example.csv",
+                    "https://www.1001tracklists.com/tracklist/1ldcw1rk/hardwell-mainstage-ultra-music-festival-miami-united-states-2016-03-19.html" : "hardwell_example.csv"}
+    
+    if url in example_urls:
         
         print("reading example")
         
-        data = pd.read_csv(os.path.join(os.getcwd(), "assets", "zeds_example.csv"))
+        data = pd.read_csv(os.path.join(os.getcwd(), "assets", example_urls[url]))
     
     else:
-        print("getting_data")
+        print("getting data")
         
         data = get_data(url)
     
-        print("gotten_data")
+        print("gotten data")
     
     tracklist_name = data.iloc[0]["tracklist_name"]
     
@@ -836,7 +901,7 @@ def update_song(data, click_data_tempo, click_data_key):
     
     song_spotify_embed = SPOTIFY_EMBED_URL_PREFIX + song_clicked_id
     
-    song_spotify_metrics = data[data["name"] == song_clicked_name][SP_METRICS]
+    song_spotify_metrics = data[data["name"] == song_clicked_name].iloc[[0]][SP_METRICS]
     
     # Convert milliseconds to time
     millis = int(song_spotify_metrics["duration_ms"])
