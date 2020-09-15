@@ -62,9 +62,22 @@ app.layout = html.Div(
         
         html.Div([
             html.Div([
-                html.H4(children = "Enter a tracklist URL from 1001Tracklists.com or select an example",
-                        className = "title is-4",
-                        style = {'margin' : "0px 0px 12px 0px"}),
+                html.Div([
+                    html.H4(children = "Enter a tracklist URL from ",
+                            className = "title is-4",
+                            style = {"display" : "inline"}),
+                    
+                    html.A(children = "1001Tracklists.com",
+                            href = "https://www.1001tracklists.com/",
+                            target = "_blank",
+                            className = "title is-4",
+                            style = {"display" : "inline",
+                                     "color" : "#3FAEF1"}),
+                    
+                    html.H4(children = " or select an example",
+                            className = "title is-4",
+                            style = {"display" : "inline"}),
+                ], style = {'margin' : "0px 0px 12px 0px"}),
                 
                 html.Button(children = "Zeds Dead @ circuitGROUNDS",
                             id = "zeds_button",
