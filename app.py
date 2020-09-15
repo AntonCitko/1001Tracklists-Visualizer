@@ -2,6 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
+from dash.exceptions import PreventUpdate
 
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -18,6 +19,8 @@ import base64
 import os
 import string
 import re
+
+from urllib.parse import urlparse
 
 def time_to_sec(time):
     
@@ -101,7 +104,7 @@ app.layout = html.Div(
                 html.Div(id = "input_control", 
                          children = [
                             dcc.Input(
-                                id="input_url",
+                                id="user_input",
                                 value =  "https://www.1001tracklists.com/tracklist/2bqc73r1/zeds-dead-circuitgrounds-edc-las-vegas-united-states-2019-05-19.html",
                                 type = "text",
                                 placeholder = "Enter a tracklist URL from 1001Tracklists.com",
@@ -111,7 +114,15 @@ app.layout = html.Div(
                                 ),
                 ], className = "control",
                     style = {"margin" : "0px 0px 10px 0px"}),
-            
+                
+                html.Div(id = "url_error_message",
+                         children = [
+                           html.H5(children = "URL does not match expected format. Expecting https://1001tracklsts.com/tracklists/`tracklist id`/`tracklist title`.html",
+                            className = "subtitle is-5",
+                            style = {'color' : 'red'}),
+                           html.P(children = "")],
+                        style = {"display" : "none"}),
+                
                 dcc.Loading(id = "loading_tracklist_data",
                             children = [html.H5(id = "tracklist_name_formatted",
                                                 className = "subtitle is-5",
@@ -377,11 +388,13 @@ app.layout = html.Div(
         html.Div(id='tracklist_metrics_mean', style={'display': 'none'}),
         html.Div(id="song_clicked", style={"display":"none"}),
         html.Div(id="size", style={"display":"none"}),
+        html.Div(id="checked_url", style={"display" : "none"}),
+        html.Div(id="input_url", style={"display": "none"}),
         dcc.Location(id="url")
     ]) 
 
 @app.callback(
-    Output("input_url", "value"),
+    Output("user_input", "value"),
     [Input("zeds_button", "n_clicks"),
      Input("hardwell_button", "n_clicks"),
      Input("cosmic_button", "n_clicks"),
@@ -403,6 +416,31 @@ def update_example(zeds, hardwell, cosmic, justice, nightowl):
     return(url)
 
 @app.callback(
+    [Output("checked_url", "children"),
+     Output("url_error_message", "style")],
+    [Input("user_input", "value")]
+)
+def check_url(url):
+    url_scheme = urlparse(url)
+    
+    if url_scheme.netloc == "www.1001tracklists.com" and url_scheme.path.split("/")[1] == "tracklist":
+        return(url, {"display" : "none"})
+    
+    else:
+        return(url, {"display" : "inline"})
+    
+@app.callback(
+    Output("input_url", "children"),
+    [Input("checked_url", "children"),
+     Input("url_error_message", "style")]
+)
+def check_url(url, error_style):
+    if error_style["display"] == "inline":
+        raise PreventUpdate("Bad URL")
+    
+    return(url)
+
+@app.callback(
     [Output("tracklist_name", "children"),
     Output("tracklist_name_formatted", "children"),
     Output("tracklist_data", "children"),
@@ -413,7 +451,7 @@ def update_example(zeds, hardwell, cosmic, justice, nightowl):
     Output("avg_tempo", "children"),
     Output("avg_loud", "children"),
     Output("song_data_found_ratio", "children")],
-    [Input("input_url", "value")]
+    [Input("input_url", "children")]
 )
 def update_url(url):
     
@@ -835,7 +873,7 @@ app.clientside_callback(
     }
     """,
     Output('size', 'children'),
-    [Input('input_url', 'value'),
+    [Input('input_url', 'children'),
      Input("url", "href")]
 )
 
