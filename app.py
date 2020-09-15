@@ -98,7 +98,7 @@ app.layout = html.Div(
                             id = 'nightowl_button',
                             n_clicks = 0,
                             className = "button is-black is-rounded",
-                            style = {'margin': '0px 50px 10px 0px',
+                            style = {'margin': '0px 5px 10px 0px',
                                      'background-color' : '#1D8F83'}),
                 
                 html.A(href = "https://github.com/AntonCitko/1001Tracklists-Visualizer/blob/master/README.md",
@@ -317,8 +317,7 @@ app.layout = html.Div(
                         html.Figure(className = "image", 
                                     children = [html.Img(id = "image_wc",
                                                          style = {"margins" : "auto",
-                                                                  "max-height" : "500px",
-                                                                  "max-width" : "1000px"})],
+                                                                  "max-height" : "500px"})],
                                     style = {"margin" : "auto",
                                              "max-height" : "500px"}),
             ], className = "box column",
