@@ -442,7 +442,7 @@ def check_url(url):
     [Input("checked_url", "children"),
      Input("url_error_message", "style")]
 )
-def check_url(url, error_style):
+def continue_good_url(url, error_style):
     if error_style["display"] == "inline":
         raise PreventUpdate("Bad URL")
     
@@ -486,8 +486,12 @@ def update_url(url):
     
     tracklist_name_formatted = "\n".join(re.split(" - |, ", tracklist_name))
     
+    if "time" not in data or data["time"].str.isspace().all():
+        data["time"] = [str(i) + ":00" for i in range(data.shape[0])]
+    
     data["time"] = data["time"].replace(r'^\s*$', np.nan, regex=True)
     data["time"] = data["time"].ffill()
+    
     data["time"] = data["time"].str.strip()
     data["seconds"] = data["time"].apply(time_to_sec)
     
