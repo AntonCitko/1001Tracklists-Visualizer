@@ -98,8 +98,16 @@ app.layout = html.Div(
                             id = 'nightowl_button',
                             n_clicks = 0,
                             className = "button is-black is-rounded",
-                            style = {'margin': '0px 0px 0px 0px',
+                            style = {'margin': '0px 50px 10px 0px',
                                      'background-color' : '#1D8F83'}),
+                
+                html.A(href = "https://github.com/AntonCitko/1001Tracklists-Visualizer/blob/master/README.md",
+                       children = "Want info or need help?",
+                       target="_blank",
+                       className = "button is-black is-rounded",
+                       style = {"margin" : "0px 0px 10px 0px",
+                                "background-color" : "#F30000",
+                                "float" : "right"}),
                 
                 html.Div(id = "input_control", 
                          children = [
