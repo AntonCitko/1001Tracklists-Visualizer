@@ -187,7 +187,8 @@ app.layout = html.Div(
                                         "width" : "100%",
                                         "frameborder" : "0",
                                         "allowtransparency" : "True"})
-                ], style = {"height" : "490px",
+                ], className = "is-hidden-touch",
+                    style = {"height" : "490px",
                              "margin" : "0px 0px 10px 0px",
                              "background-color" : "black"}),
                 html.Div([
@@ -313,8 +314,9 @@ app.layout = html.Div(
                                      "margin" : "5px 0px 0px 0px",
                                      "border-radius" : "0px"}
                             )
-                ])
-            ], className = "column",
+                ], className = "is-hidden-touch"),
+
+            ], className = "column is-hidden-touch",
                style = {"height" : "100%",
                         "min-width" : "450px",
                         "max-width" : "450px",
@@ -323,6 +325,150 @@ app.layout = html.Div(
             
         ], className = "columns is-desktop",
             style = {"margin" : "0px 10px 0px 10px"}),
+        
+                        
+                
+            html.Div([
+                html.Div([
+                    html.Iframe(id = "spotify_play_mobile",
+                                style = {"height" : "100%",
+                                        "width" : "100%",
+                                        "frameborder" : "0",
+                                        "allowtransparency" : "True"})
+                ], className = "column",
+                    style = {"height" : "450px",
+                             "margin" : "0px 10px 10px 10px",
+                             "background-color" : "black"}),
+                html.Div([
+                    html.Div([
+                        html.P("Energy", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_energy_mobile")],
+                            className="box",
+                            style = {"width" : "30%",
+                                     "height" : "90px",
+                                     "display" : "inline-block",
+                                     "margin" : "0px 5px 5px 0px",
+                                     "border-radius" : "0px"}
+                            ),
+                    html.Div([
+                        html.P("Danceability", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_danceability_mobile")],
+                            className="box",
+                            style = {"width" : "35.4%",
+                                     "height" : "90px",
+                                     "display" : "inline-block",
+                                     "margin" : "0px 5px 5px 5px",
+                                     "border-radius" : "0px"}
+                            ),
+                    html.Div([
+                        html.P("Valence", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_valence_mobile")],
+                            className="box",
+                            style = {"width" : "30%",
+                                     "height" : "90px",
+                                     "display" : "inline-block",
+                                     "margin" : "0px 0px 5px 5px",
+                                     "border-radius" : "0px"}
+                            ),
+                    html.Div([
+                        html.P("Instrumentalness", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_instrumentalness_mobile")],
+                            className="box",
+                            style = {"width" : "39.4%",
+                                     "height" : "90px",
+                                     "display" : "inline-block",
+                                     "margin" : "5px 5px 5px 0px",
+                                     "border-radius" : "0px"}
+                            ),
+                    html.Div([
+                        html.P("Acousticness", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_acousticness_mobile")],
+                            className="box",
+                            style = {"width" : "28%",
+                                     "height" : "90px",
+                                     "display" : "inline-block",
+                                     "margin" : "5px 5px 5px 5px",
+                                     "border-radius" : "0px"}
+                            ),
+                    html.Div([
+                        html.P("Speechiness", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_speechiness_mobile")],
+                            className="box",
+                            style = {"width" : "28%",
+                                     "height" : "90px",
+                                     "display" : "inline-block",
+                                     "margin" : "5px 0px 5px 5px",
+                                     "border-radius" : "0px"}
+                            ),
+                    html.Div([
+                        html.P("Key", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_key_mobile")],
+                            className="box",
+                            style = {"width" : "22.5%",
+                                     "height" : "90px",
+                                     "display" : "inline-block",
+                                     "margin" : "5px 5px 5px 0px",
+                                     "border-radius" : "0px"}
+                            ),
+                    html.Div([
+                        html.P("Mode", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_mode_mobile")],
+                            className="box",
+                            style = {"width" : "22.5%",
+                                     "height" : "90px",
+                                     "display" : "inline-block",
+                                     "margin" : "5px 5px 5px 5px",
+                                     "border-radius" : "0px"}
+                            ),
+                    html.Div([
+                        html.P("Tempo", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_tempo_mobile")],
+                            className="box",
+                            style = {"width" : "22.5%",
+                                     "height" : "90px",
+                                     "display" : "inline-block",
+                                     "margin" : "5px 5px 5px 5px",
+                                     "border-radius" : "0px"}
+                            ),
+                    html.Div([
+                        html.P("Duration", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_duration_mobile")],
+                            className="box",
+                            style = {"width" : "25.7%",
+                                     "height" : "90px",
+                                     "display" : "inline-block",
+                                     "margin" : "5px 0px 5px 5px",
+                                     "border-radius" : "0px"}
+                            ),
+                    html.Div([
+                        html.P("Artist Genres", 
+                               style = {"font-weight" : "bold"}), 
+                        html.H4(id = "sp_genres_mobile",
+                                style = {"white-space" : "pre"})],
+                            className="box",
+                            style = {"width" : "100%",
+                                     "height" : "150px",
+                                     "display" : "inline-block",
+                                     "margin" : "5px 0px 0px 0px",
+                                     "border-radius" : "0px"}
+                            )
+                ], className = "column",
+                    style = {"min-width" : "500px",
+                             "margin" : "0px 10px 0px 0px",
+                             "height" : "450px"})
+            ], className = "columns is-hidden-desktop is-mobile",
+                style = {"margin" : "10px 10px 0px 10px",
+                         "padding" : "0px"}),
         
         html.Div([
             html.Div(id = "wordcloud_box",
@@ -374,11 +520,14 @@ app.layout = html.Div(
                         ], className = "column"),
                     ], className = "columns has-text-centered",
                        style = {"width" : "100%",
-                                "height" : "50px"})
+                                "height" : "50px",
+                                "margin" : "12px 0px 0px 0px"})
                 
                 ], className = "box",
                    style = {"border-radius" : "0px",
                             "width" : "100%",
+                            "height" : "110px",
+                            "padding" : "40px 20px 20px 20px",
                             "margin" : "0px 0px 10px 0px"}),
                             
                 html.Div([
@@ -387,7 +536,7 @@ app.layout = html.Div(
                     style = {"width" : "100%",
                             "height" : "380px",
                             "border-radius" : "0px",
-                            "padding" : "8px"})
+                            "padding" : "12px"})
                 
             ], className="column",
                 style = {"margin" : "0px 10px 10px 10px",
@@ -937,7 +1086,20 @@ def make_word_cloud(song_genres, width):
      Output("sp_mode", "children"),
      Output("sp_tempo", "children"),
      Output("sp_genres", "children"),
-     Output("sp_duration", "children")],
+     Output("sp_duration", "children"),
+     
+     Output("spotify_play_mobile", "src"),
+     Output("sp_energy_mobile", "children"),
+     Output("sp_danceability_mobile", "children"),
+     Output("sp_valence_mobile", "children"),
+     Output("sp_acousticness_mobile", "children"),
+     Output("sp_instrumentalness_mobile", "children"),
+     Output("sp_speechiness_mobile", "children"),
+     Output("sp_key_mobile", "children"),
+     Output("sp_mode_mobile", "children"),
+     Output("sp_tempo_mobile", "children"),
+     Output("sp_genres_mobile", "children"),
+     Output("sp_duration_mobile", "children")],
     [Input("tracklist_data_clean", "children"),
      Input("tempo_graph", "clickData"),
      Input("key_graph", "clickData")]
@@ -995,7 +1157,7 @@ def update_song(data, click_data_tempo, click_data_key):
     
     song_spotify_metrics = tuple(song_spotify_metrics.round(2).values.tolist()[0])
     
-    return(song_clicked_name, song_spotify_embed, *song_spotify_metrics)
+    return(song_clicked_name, song_spotify_embed, *song_spotify_metrics, song_spotify_embed, *song_spotify_metrics)
 
 
 if __name__ == "__main__":
