@@ -496,7 +496,8 @@ app.layout = html.Div(
                                     
                         html.Div([
                             html.H6("Most Common Camelot Key",
-                                    className = "title is-6"),
+                                    className = "title is-6",
+                                    style = {"white-space" : "nowrap"}),
                         ], className = "column"),
         
                         html.Div([
