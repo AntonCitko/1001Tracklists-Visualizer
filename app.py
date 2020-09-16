@@ -527,7 +527,7 @@ app.layout = html.Div(
                    style = {"border-radius" : "0px",
                             "width" : "100%",
                             "height" : "110px",
-                            "padding" : "40px 20px 20px 20px",
+                            "padding" : "30px 20px 20px 20px",
                             "margin" : "0px 0px 10px 0px"}),
                             
                 html.Div([
