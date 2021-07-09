@@ -39,10 +39,12 @@ class trackList:
         
         meta_data["tracklist_name"] = self.soup.find("h1", id = "pageTitle").text.strip()
         
-        meta = self.soup.find("div", id = "leftDiv")
+        # meta = self.soup.find("div", id = "leftDiv")
+        meta = self.soup.find("div", id = "left")
         
         try:
-            meta_data["tracklist_date"] = meta.find("span", title = "tracklist recording date").parent.parent.select("td")[1].text
+            # meta_data["tracklist_date"] = meta.find("span", title = "tracklist recording date").parent.parent.select("td")[1].text
+            meta_data["tracklist_date"] = meta.find("div", title = "tracklist recording date").find_next("div").text
         except (AttributeError, IndexError):
             print(f"Couldn't find tracklist recording date")
         
@@ -71,7 +73,8 @@ class trackList:
         
         try:
             # Splits each genre into its own key with index
-            tracklist_genres = meta.find("td", id = "tl_music_styles").text.split(", ")
+            # tracklist_genres = meta.find("td", id = "tl_music_styles").text.split(", ")
+            tracklist_genres = meta.find("div", id = "tl_music_styles").text.split(", ")
             for i, genre in enumerate(tracklist_genres):
                 meta_data["genre" + str(i)] = genre        
         except:
@@ -118,7 +121,8 @@ class trackList:
     Includes track name, artist, url, 1001tracklists id, time played, track number, whether its a mashup and to what mashup it matches
     '''
     def get_track_data(self):
-        tl_table = self.soup.find_all("tr", {"id": re.compile('tlp_[0-9]+')})
+        # tl_table = self.soup.find_all("tr", {"id": re.compile('tlp_[0-9]+')})
+        tl_table = self.soup.find_all("div", id = re.compile('tlp_[0-9]+'), class_ = "tlpItem")
         
         tracks_info = []
         
@@ -131,10 +135,12 @@ class trackList:
                 except AttributeError:
                     pass
         
-              # 1001 Track ID
+            # 1001 Track ID
             try:
-                tr_id = cell.find("span", {"id": re.compile('tr_([0-9]+)')}).get("id")
-                track_info["id"] = re.search("tr_([0-9]+)", tr_id).group(1)
+                # tr_id = cell.find("span", {"id": re.compile('tr_([0-9]+)')}).get("id")
+                tr_id = cell.find("div", {"class" : "mediaRow"}).get("data-trackid")
+                # track_info["id"] = re.search("tr_([0-9]+)", tr_id).group(1)
+                track_info["id"] = tr_id
             except AttributeError:
                 pass
           
@@ -158,10 +164,11 @@ class trackList:
                 try:
                     cell.find("span", class_ = "mashupTrack").text
                     track_info["mashup"] = True
-                    if tracks_info[-1]["name"]:
-                        track_info["mashup_name"] = tracks_info[-1]["name"]
-                    else:
-                        track_info["mashup_name"] = "Name Missing"
+                    if "track_number" not in track_info:
+                        if tracks_info[-1]["name"]:
+                            track_info["mashup_name"] = tracks_info[-1]["name"]
+                        else:
+                            track_info["mashup_name"] = "Name Missing"
                 except AttributeError:
                     track_info["mashup"] = False
         
