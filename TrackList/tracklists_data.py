@@ -146,7 +146,10 @@ class trackList:
           
             # Time in set played
             try:
-                track_info["time"] = cell.find("div", {"class": "cueValueField action"}).text
+                # track_info["time"] = cell.find("div", {"class": "cueValueField action"}).text
+                time = cell.find("div", {"id" : re.compile('cue_[0-9]+')}).text
+                if time != "":
+                    track_info["time"] = cell.find("div", {"id" : re.compile('cue_[0-9]+')}).text
             except AttributeError:
                 pass
           
